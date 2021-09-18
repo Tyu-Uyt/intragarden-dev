@@ -15,22 +15,22 @@
 	[2]	-	Each function must start with set or get.
 	[3] -	Each string must be encapsuled with single quotes.
 	[4] -	If applicable, then the first function parameter must
-			be the parent, the child's given name, who does the 
+			be the parent, the child's given name, who does the
 			child associate as, and what variables needs to be
 			handled or given.
 	[5]	-	Placing styles in setElement function is prohibited.
 */
 
 function setElement(cntParent, strElement, strID, strType, strValue, strClass, blnCreateText, blnIsPicture){
-	
+
 	let tmpElement = document.createElement(strElement);
-	
-	
+
+
 	if (blnCreateText) {
 		let tmpText = document.createTextNode(strValue);
 		tmpElement.append(tmpText);
 	} // End if
-	
+
 	if (blnIsPicture) {
 		tmpElement.src = strValue;
 		cntParent.prepend(tmpElement);
@@ -39,84 +39,24 @@ function setElement(cntParent, strElement, strID, strType, strValue, strClass, b
 		tmpElement.setAttribute('value', strValue);
 		cntParent.append(tmpElement);
 	} // End if
-	
+
 	tmpElement.setAttribute('id', strID);
 	tmpElement.setAttribute('type', strType);
 	tmpElement.setAttribute('class', strClass);
-	
+
 	return tmpElement;
 } // End of setElement function
 
-function initalize(arrVariables, arrTexts){
-	let cntParent = document.getElementById('cntSquare');
-	let cntCommand = 	setElement(cntParent, 'div', 'cntCommand', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
-	let cntStatus =		setElement(cntCommand, 'div', 'cntStatus', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
-	let cntButtons = 	setElement(cntCommand, 'div', 'cntButtons', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
-	let imgTenant = 	setElement(cntParent, 'img', 'imgTenant', 'image/png', 'img_char_tenant_normal.png', 'image', false, true);
-	let lblEnergy = 	setElement(cntStatus, 'label', 'lblEnergy', '%NOTYPE%', 'Energy: ' + arrVariables[0] + '/' + arrVariables[3], 'label', true, false);
-	let lblHunger = 	setElement(cntStatus, 'label', 'lblHunger', '%NOTYPE%', 'Hunger: ' + arrVariables[1] + '/' + arrVariables[4], 'label', true, false);
-	let	lblSocial =		setElement(cntStatus, 'label', 'lblSocial', '%NOTYPE%', 'Social: ' + arrVariables[2] + '/' + arrVariables[5], 'label', true, false);
-	let btnSleep =		setElement(cntButtons, 'input', 'btnSleep', 'button', 'Sleep', 'button', false, false);
-	let btnEat = 		setElement(cntButtons, 'input', 'btnEat', 'button', 'Eat', 'button', false, false);
-	let btnTalk =		setElement(cntButtons, 'input', 'btnTalk', 'button', 'Talk', 'button', false, false);
-	let btnLeave =		setElement(cntButtons, 'input', 'btnLeave', 'button', 'Leave', 'button', false, false);
-	
-	btnLeave.style.marginRight = '0px';
-	
-	btnEat.onclick = function() {setButtonFunctionality(arrVariables, arrTexts, [0, -10, 1, 20], 0, true);};
-	btnSleep.onclick = function() {setButtonFunctionality(arrVariables, arrTexts, [0, 20, 1, -10], 1, true);};
-	btnTalk.onclick = function() {setButtonFunctionality(arrVariables, arrTexts, [0, -10, 2, 20], 2, true);};
-	btnLeave.onclick = function() {setButtonFunctionality(arrVariables, arrTexts, [0, -10, 2, 20], 3, false);};
-	
-	setTimeout(function() {setBlink();}, 4000);
-	setInterval(function(){getBackgroundUpdate(arrVariables, arrTexts)}, 7500);
-} // End of initalize function
+function setCanvas(arrVariables, arrTexts, intCode, intCodeSecondary, blnRemoveScreen, blnDeath) {
+	/* Primary Action - What are we doing?
+	* [0] - Do nothing
+	*	[1]	-	Draw a canvas
+	*			|_ Secondary Action - What exactly are we drawling?
+	*						[0] - Main
+	*						[1] - Login
+	*						[2] - Logout
+	*	[2] -	Update the status display */
 
-function getBackgroundUpdate(arrVariables, arrTexts){
-	let blnDeath = false
-	
-	for (let intInterval = 0; intInterval < arrVariables.length - 3; intInterval++) {
-		arrVariables[intInterval] -= 1;	
-		if (arrVariables[intInterval] <= 0) {
-			blnDeath = true;
-			break;
-		}
-		else if (arrVariables[intInterval] > 100) {arrVariables[intInterval] = 100;} // End if
-	} // End for
-	
-	setCanvas(arrVariables, arrTexts, 2, false, blnDeath);
-	
-	// CONSIDER:	Maybe this is where random events can happen be called here?
-} // End of getBackgroundUpdate function
-
-function setDeath(){
-	setStopIntervals();
-	document.body.style.backgroundImage = 'none';
-	document.body.style.backgroundColor = 'black';
-	document.getElementById('cntSquare').style.backgroundColor = 'black';
-	document.getElementById('cntCommand').remove();
-	document.getElementById('imgTenant').src = 'img_char_tenant_dying.png';
-	setTimeout(function() {document.getElementById('imgTenant').remove();}, 1500);
-	
-	setTimeout(function() {
-		let lblDeath = setElement(document.getElementById('cntSquare'), 'label', 'lblDeath', '%NOTYPE%', 'Unfortunately, your tenant has deceased.', 'label', true, false);	
-	}, 4000);
-} // End of setDeath function
-
-function setStopIntervals(){
-	let totHighestId = setTimeout(";");
-	
-	for (let intInterval = 0 ; intInterval < totHighestId ; intInterval++) {
-		clearTimeout(intInterval); 
-	} // End for
-} // End of setStopIntervals function
-
-function setCanvas(arrVariables, arrTexts, intCode, blnRemoveScreen, blnDeath){
-	// Action - How would the canvas be changed?
-	//  [0] -   Do nothing
-	//	[1]	-	Go back to Main menu
-	//	[2] -	Update the status display
-	
 	if (blnRemoveScreen) {
 		setStopIntervals();
 		let cntParent = document.getElementById('cntSquare');
@@ -124,14 +64,63 @@ function setCanvas(arrVariables, arrTexts, intCode, blnRemoveScreen, blnDeath){
 			cntParent.removeChild(cntParent.firstChild);
 		} // End while
 	}
-	
+
 	switch (intCode) {
-		case 0:
+		case 0: // Do nothing
 			break;
-		case 1:
-			initalize(arrVariables, arrTexts);
+		case 1: // Draw a canvas
+			switch (intCodeSecondary) {
+				case 0: // Main
+					let cntCommand = 	setElement(document.getElementById('cntSquare'), 'div', 'cntCommand', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
+					let cntStatus =		setElement(cntCommand, 'div', 'cntStatus', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
+					let cntButtonsMain = 	setElement(cntCommand, 'div', 'cntButtonsMain', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
+					let imgTenant = 	setElement(cntParentMain, 'img', 'imgTenant', 'image/png', 'img/char/tenant/normal.png', 'image', false, true);
+					let lblEnergy = 	setElement(cntStatus, 'label', 'lblEnergy', '%NOTYPE%', 'Energy: ' + arrVariables[0] + '/' + arrVariables[3], 'label', true, false);
+					let lblHunger = 	setElement(cntStatus, 'label', 'lblHunger', '%NOTYPE%', 'Hunger: ' + arrVariables[1] + '/' + arrVariables[4], 'label', true, false);
+					let	lblSocial =		setElement(cntStatus, 'label', 'lblSocial', '%NOTYPE%', 'Social: ' + arrVariables[2] + '/' + arrVariables[5], 'label', true, false);
+					let btnSleep =		setElement(cntButtonsMain, 'input', 'btnSleep', 'button', 'Sleep', 'button', false, false);
+					let btnEat = 		setElement(cntButtonsMain, 'input', 'btnEat', 'button', 'Eat', 'button', false, false);
+					let btnTalk =		setElement(cntButtonsMain, 'input', 'btnTalk', 'button', 'Talk', 'button', false, false);
+					let btnLeave =		setElement(cntButtonsMain, 'input', 'btnLeave', 'button', 'Leave', 'button', false, false);
+
+					btnLeave.style.marginRight = '0px';
+
+					btnEat.onclick = function() {setButtonFunctionality(arrVariables, arrTexts, [0, -10, 1, 20], 0, true);};
+					btnSleep.onclick = function() {setButtonFunctionality(arrVariables, arrTexts, [0, 20, 1, -10], 1, true);};
+					btnTalk.onclick = function() {setButtonFunctionality(arrVariables, arrTexts, [0, -10, 2, 20], 2, true);};
+					btnLeave.onclick = function() {setButtonFunctionality(arrVariables, arrTexts, [0, -10, 2, 20], 3, false);};
+
+					setTimeout(function() {setBlink();}, 4000);
+					setInterval(function(){getBackgroundUpdate(arrVariables, arrTexts)}, 7500);
+					break;
+				case 1: // Login
+					let cntLogin = 				setElement(document.getElementById('cntSquare'), 'div', 'cntLogin', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
+					let imgAdvocateLogin = 			setElement(cntLogin, 'img', 'imgAdvocateLogin', 'image/png', 'img/char/advocate/normal.png', 'image', false, true);
+					let lblTitleLogin = 				setElement(cntLogin, 'label', 'lblTitle', '%NOTYPE%', 'Welcome', 'label', true, false);
+					let lblParagraphLogin =			setElement(cntLogin, 'label', 'lblParagraphLogin', '%NOTYPE%', 'Provide me your given data card from your last visit:', 'label', true, false);
+					let boxDataLogin =			setElement(cntLogin, 'input', 'boxDataLogin', 'textbox', '', 'textbox', false, false);
+					let cntButtonsLogin =			setElement(cntLogin, 'div', 'cntButtonsLogin', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
+					let btnContinueLogin = 			setElement(cntButtonsLogin, 'input', 'btnContinueLogin', 'button', 'Here it is!', 'button', false, false);
+					let btnBackLogin =				setElement(cntButtonsLogin, 'input', 'btnBackLogin', 'button', 'Huh?', 'button', false, false);
+
+					btnContinueLogin.onclick = function(){getValidation(arrVariables, arrTexts);};
+					btnBackLogin.onclick = function(){
+						setEvent(arrTexts, 4, [], arrVariables, false);};
+					break;
+				default: // Logout
+					let cntPrompt = 	setElement(document.getElementById('cntSquare'), 'div', 'cntPrompt', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
+					let imgAdvocateLogout =	setElement(cntPrompt, 'img', 'imgAdvocateLogout', 'image/png', 'img/char/advocate/normal.png', 'image', false, true);
+					let lblTitleLogout = setElement(cntPrompt, 'label', 'lblTitle', '%NOTYPE%', 'Aww, leaving already?', 'label', true, false);
+					let lblParagraphLogout = setElement(cntPrompt, 'label', 'lblParagraphLogout', '%NOTYPE%', 'Before you go, here is our data card. Please don\'t forget about our existance!', 'label', true, false);
+					let boxData = setElement(cntPrompt, 'input', 'boxData', 'textbox', getDataCard(arrVariables), 'textbox', false, false);
+					let cntButtonsLogout = setElement(cntPrompt, 'div', 'cntButtonsLogout', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
+					let btnContinueLogout =	setElement(cntButtonsLogout, 'input', 'btnContinueLogout', 'button', 'See ya!', 'button', false, false);
+					let btnBackLogout = setElement(cntButtonsLogout, 'input', 'btnBackLogout', 'button', 'Hold on', 'button', false, false);
+					btnContinueLogout.onclick = 	function(){location.href = 'https://www.google.com/';};
+					btnBackLogout.onclick = 		function(){setCanvas(arrVariables, arrTexts, 1, 0, true, false)};
+			}
 			break;
-		default:
+		default: // Update the status display
 			if (blnDeath){setDeath();}
 			else {
 				document.getElementById('lblEnergy').innerHTML = 'ENERGY: ' + arrVariables[0] + '/' + arrVariables[3];
@@ -141,9 +130,48 @@ function setCanvas(arrVariables, arrTexts, intCode, blnRemoveScreen, blnDeath){
 	} // End Switch
 } // End of setCanvas function
 
+function getBackgroundUpdate(arrVariables, arrTexts){
+	let blnDeath = false
+
+	for (let intInterval = 0; intInterval < arrVariables.length - 3; intInterval++) {
+		arrVariables[intInterval] -= 1;
+		if (arrVariables[intInterval] <= 0) {
+			blnDeath = true;
+			break;
+		}
+		else if (arrVariables[intInterval] > 100) {arrVariables[intInterval] = 100;} // End if
+	} // End for
+
+	setCanvas(arrVariables, arrTexts, 2, 0, false, blnDeath);
+
+	// CONSIDER:	Maybe this is where random events can happen be called here?
+} // End of getBackgroundUpdate function
+
+function setDeath(){
+	setStopIntervals();
+	document.body.style.backgroundImage = 'none';
+	document.body.style.backgroundColor = 'black';
+	document.getElementById('cntSquare').style.backgroundColor = 'black';
+	document.getElementById('cntCommand').remove();
+	document.getElementById('imgTenant').src = 'img/char/tenant/dying.png';
+	setTimeout(function() {document.getElementById('imgTenant').remove();}, 1500);
+
+	setTimeout(function() {
+		let lblDeath = setElement(document.getElementById('cntSquare'), 'label', 'lblDeath', '%NOTYPE%', 'Unfortunately, your tenant has deceased.', 'label', true, false);
+	}, 4000);
+} // End of setDeath function
+
+function setStopIntervals(){
+	let totHighestId = setTimeout(";");
+
+	for (let intInterval = 0 ; intInterval < totHighestId ; intInterval++) {
+		clearTimeout(intInterval);
+	} // End for
+} // End of setStopIntervals function
+
 function getDataCard(arrVariables){
 	arrVariables = arrVariables.map(String);
-	
+
 	for (let i = 0; i < 3; i++) {
 		if (arrVariables[i].length == 1) {
 			arrVariables[i] = "00" + arrVariables[i];
@@ -152,23 +180,23 @@ function getDataCard(arrVariables){
 			arrVariables[i] = "0" + arrVariables[i];
 		}
 	}
-	
+
 	return new Date().getTime().toString() + arrVariables.slice(0,3).join("");
 } // End of getDataCard function
 
 function setStatus(arrVariables, arrRequests){
 	//	Purpose	-	To create messages after the event is finished
 	//	Motive	-	Enhance readability to btnEat_onClick function
-	
+
 	// 	Atanomy of the array parameter:
 	// 	[Even]	-	Status to be modified
 	// 	[Odd]	-	Value to be implied
-	
+
 	//	Is it correct to call the modifier value modifiee?
 	//	For each given status and the desired modifiee
 	let counter = -1;
 	let cntParameter = setElement(document.getElementById('cntSquare'), 'div', 'cntParameter', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
-	
+
 	for (let i = 0; i < arrRequests.length - 1; i += 2){
 		let tmpStatus = "";
 		let tmpIndicator = "";
@@ -178,9 +206,9 @@ function setStatus(arrVariables, arrRequests){
 		let isSelected = false;
 
 		arrVariables[arrRequests[i]] += tmpValue;
-		
+
 		// Check and change the values interally
-		
+
 		if (arrVariables[arrRequests[i]] > 100) {
 			arrVariables[arrRequests[i]] = 100
 		}
@@ -188,7 +216,7 @@ function setStatus(arrVariables, arrRequests){
 			setDeath();
 			break;
 		} // End if
-		
+
 		// 	Action codes goes the same listing as arrVariables
 		switch(arrRequests[i]) {
 			case 0:
@@ -203,12 +231,12 @@ function setStatus(arrVariables, arrRequests){
 				tmpStatus = "Social";
 				isSelected = true
 		} // End switch
-		
+
 		if (isSelected) {counter++;} // End if
-		
+
 		// TimgTenante should be no way for the modifier be zero
 		// in any circumstances.
-		
+
 		if (tmpValue > 0) {
 			tmpIndicator = "increased";
 			tmpExpression = "!";
@@ -217,10 +245,10 @@ function setStatus(arrVariables, arrRequests){
 			tmpIndicator = "decreased";
 			tmpExpression = ".";
 		} // End if
-		
+
 		// 	Note the `` encapsulement,
 		//	and the explicit .toString() preferrence
-		
+
 		let tmpLabel = setElement(cntParameter, 'label', 'tmpLabel' + counter, '%NOTYPE%', `${tmpStatus} value has ${tmpIndicator} by ${tmpNumber}${tmpExpression}`, 'label', true, false);
 
 		if (i == 0) {
@@ -233,31 +261,31 @@ function setCountdown(intSeconds){
 	let cntParameter = setElement(document.getElementById('cntSquare'), 'div', 'cntParameter', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
 	let lblCountdown = setElement(cntParameter, 'label', 'lblCountdown', '%NOTYPE%', 'Starting countdown', 'label', true, false);
 	let dteDeadline = new Date();
-	
+
 	dteDeadline.setSeconds(dteDeadline.getSeconds() + intSeconds);
 	dteDeadline = dteDeadline.getTime();
-	
+
 	itvCountdown = setInterval(function() {
 		let intDifference = dteDeadline - new Date().getTime();
 		let arrTime = getReadableTime(intDifference);
 		let strCountdown = "";
-		
+
 		arrTime = arrTime.map(String);
-					   
+
 		for (let i = 0; i < arrTime.length; i++)
 		{
 			let strElement = arrTime[i];
-			
+
 			if (strElement.length == 1){
 				strElement = "0" + strElement;
 			} // End if
-			
+
 			strCountdown += strElement + ":";
 		} // End for
-		
+
 		strCountdown = strCountdown.substring(0, strCountdown.length - 1);
 		lblCountdown.firstChild.nodeValue = strCountdown;
-		
+
 		if (intDifference < 0) {
 				clearInterval(itvCountdown);
 				lblCountdown.remove();
@@ -268,50 +296,40 @@ function setCountdown(intSeconds){
 function setButtonFunctionality(arrVariables, arrTexts, arrRequests, intCode, blnShowTenant){
 	//	Purpose	-	To give status buttons a reason to live
 	//	Motive	-	Part of RAD translation
-	
-	setCanvas(arrVariables, arrTexts, 0, true, false);
-	let imgTenant = 	setElement(document.getElementById('cntSquare'), 'img', 'imgTenant', 'image/png', 'img_char_tenant_normal.png', 'image', false, true);
-	
+
+	setCanvas(arrVariables, arrTexts, 0, 0, true, false);
+	let imgTenant = 	setElement(document.getElementById('cntSquare'), 'img', 'imgTenant', 'image/png', 'img/char/tenant/normal.png', 'image', false, true);
+
 	//	Associate the button as:
 	//	[0]	Eating
 	//	[1]	Sleeping
 	//	[2]	Talking
 	//	[3] Leaving
-	
+
 	if (!blnShowTenant) {
 		imgTenant.remove()
 	}
-	
+
 	switch (intCode) {
 		case 0:
-			imgTenant.src = 'img_char_tenant_eating.png';
-			setTimeout(function() {imgTenant.src = 'img_char_tenant_normal.png';
+			imgTenant.src = 'img/char/tenant/eating.png';
+			setTimeout(function() {imgTenant.src = 'img/char/tenant/normal.png';
 								   setStatus(arrVariables, arrRequests);}, 2000);
-			setTimeout(function() {setCanvas(arrVariables, arrTexts, 1, true, false);}, 5000);
+			setTimeout(function() {setCanvas(arrVariables, arrTexts, 1, 0, true, false);}, 5000);
 			break;
 		case 1:
 			let tmpSeconds = 5;
-			imgTenant.src = 'img_char_tenant_sleeping.png';
+			imgTenant.src = 'img/char/tenant/sleeping.png';
 			setCountdown(tmpSeconds);
-			setTimeout(function() {imgTenant.src = 'img_char_tenant_normal.png';
+			setTimeout(function() {imgTenant.src = 'img/char/tenant/normal.png';
 								   setStatus(arrVariables, arrRequests);}, (tmpSeconds) * 1000 + 50);
-			setTimeout(function() {setCanvas(arrVariables, arrTexts, 1, true, false);}, (tmpSeconds + 3) * 1000);
+			setTimeout(function() {setCanvas(arrVariables, arrTexts, 1, 0, true, false);}, (tmpSeconds + 3) * 1000);
 			break;
 		case 2:
 			setEvent(arrTexts, 0, arrRequests, arrVariables, true);
 			break;
 		default:
-			let cntPrompt = 	setElement(document.getElementById('cntSquare'), 	'div', 		'cntPrompt', 	'%NOTYPE%', 	'%NOVALUE%', 																		'container', 	false, false);
-			
-			let imgAdvocate =	setElement(cntPrompt, 								'img', 		'imgAdvocate', 	'image/png', 	'img_char_advocate_normal.png', 													'image', 		false, true);
-			let lblTitle =		setElement(cntPrompt, 								'label', 	'lblTitle', 	'%NOTYPE%', 	'Aww, leaving already?', 															'label', 		true, false);
-			let lblParagraph =	setElement(cntPrompt, 								'label', 	'lblParagraph', '%NOTYPE%', 	'Before you go, here is our data card. Please don\'t forget about our existance!', 	'label',		true, false);
-			let boxData = 		setElement(cntPrompt, 								'input', 	'boxData', 		'textbox', 		getDataCard(arrVariables), 															'textbox',		false, false);
-			let cntButtons = 	setElement(cntPrompt, 								'div', 		'cntButtons', 	'%NOTYPE%', 	'%NOVALUE%', 																		'container', 	false, false);
-			let btnContinue =	setElement(cntButtons, 								'input', 	'btnContinue', 	'button', 	'See ya!', 																'button',		false, false);
-			let btnBack = 		setElement(cntButtons, 								'input', 	'btnBack', 		'button', 	'Hold on', 																			'button',		false, false);
-			btnContinue.onclick = 	function(){location.href = 'https://www.google.com/';};
-			btnBack.onclick = 		function(){setCanvas(arrVariables, arrTexts, 1, true, false)};
+			break;
 	} // End switch
 } // End of buttonFunctionality function
 
@@ -328,7 +346,7 @@ function setEmotion(imgTenant, intXValue, intYValue, intSecondsInterval, intSeco
 				intY -= intYValue;
 				intX -= intXValue;
 			}
-		
+
 		intSecondsCounter += intSecondsInterval;
 		if (intSecondsCounter == intSecondsRemaining){clearInterval(itvStyle);}
 	}, intSecondsInterval);
@@ -355,48 +373,48 @@ function setTextParse(cntTextbox, stringParameter){
 						'#tenant_center#',
 						'#tenant_shocked#',
 				   ];
-	
+
 	for (let i = 0; i < arrCodes.length; i++) {
 		if (stringParameter.indexOf(arrCodes[i]) > -1) {
 			stringParameter = stringParameter.slice(arrCodes[i].length);
-				
+
 			switch (i){
 				case 0: // tenant
-					setElement(cntTextbox, 'img', 'imgTenant', 'image/png', 'img_char_tenant_normal.png', 'image', false, true);
+					setElement(cntTextbox, 'img', 'imgTenant', 'image/png', 'img/char/tenant/normal.png', 'image', false, true);
 					break;
 				case 1: // advocate
-					setElement(cntTextbox, 'img', 'imgAdvocate', 'image/png', 'img_char_advocate_normal.png', 'image', false, true);
+					setElement(cntTextbox, 'img', 'imgAdvocate', 'image/png', 'img/char/advocate/normal.png', 'image', false, true);
 					break;
 				case 2: // tenant_happy
 				    imgTenant = document.getElementById('imtTenant');
-					imgTenant.src = 'img_char_tenant_happy.png';
+					imgTenant.src = 'img/char/tenant/happy.png';
 					setEmotion(imgTenant, 0, 10, 10, 100);
 					break;
 				case 3: // tenant_angry
 					imgTenant = document.getElementById('imtTenant');
-					imgTenant.src ='img_char_tenant_angry.png';
+					imgTenant.src ='img/char/tenant/angry.png';
 					setEmotion(imgTenant, 10, 0, 10, 100);
 					break;
 				case 4: // tenant_normal
-					imgTenant.src = 'img_char_tenant_normal.png';
+					imgTenant.src = 'img/char/tenant/normal.png';
 					break;
 				case 5: // advocate_read
 					break;
 				case 6: // advocate_shocked
-					document.getElementById('imgAdvocate').src = 'img_char_advocate_shocked.png';
+					document.getElementById('imgAdvocate').src = 'img/char/advocate/shocked.png';
 					break;
 				case 7: // advocate_angry
-					document.getElementById('imgAdvocate').src = 'img_char_advocate_angry.png';
+					document.getElementById('imgAdvocate').src = 'img/char/advocate/angry.png';
 					break;
 				case 8: // advocate_cry
 					break;
 				case 9: // advocate_depressed
 					break;
 				case 10: // advocate_delusional
-					document.getElementById('imgAdvocate').src = 'img_char_advocate_delusional.png';
+					document.getElementById('imgAdvocate').src = 'img/char/advocate/delusional.png';
 					break;
 				case 11: // advocate_normal
-					document.getElementById('imgAdvocate').src = 'img_char_advocate_normal.png';
+					document.getElementById('imgAdvocate').src = 'img/char/advocate/normal.png';
 					break;
 				case 12: // advocate_left
 					let strCurrentInfo = document.getElementById('imgAdvocate').style.transform
@@ -415,39 +433,39 @@ function setTextParse(cntTextbox, stringParameter){
 					document.getElementById('imgTenant').style.transform = strCurrentInfo02 + 'translateX(-250px';
 					break;
 				case 17: // tenant_shocked
-					document.getElementById('imgTenant').src = 'img_char_tenant_dying.png';
+					document.getElementById('imgTenant').src = 'img/char/tenant/dying.png';
 					break;
 			} // End Switch
 		} // End if
 	} // End for
-	
+
 	return stringParameter;
 } // End of setEmotion function
 
 function setEvent(arrTexts, intEventNumber, arrRequests, arrVariables, blnShowParameter){
-	setCanvas(arrVariables, arrTexts, 0, true, false);
+	setCanvas(arrVariables, arrTexts, 0, 0, true, false);
 	let cntSquare = document.getElementById('cntSquare');
 	let cntTextbox = 	setElement(cntSquare, 'div', 'cntTextbox', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
-	let imgArrow = 		setElement(cntTextbox, 'img', 'imgArrow', 'image/png', 'img_ugi_arrow.png', 'image', false, true);
+	let imgArrow = 		setElement(cntTextbox, 'img', 'imgArrow', 'image/png', 'img/ugi/arrow.png', 'image', false, true);
 	let lblText =		setElement(cntTextbox, 'label', 'lblText', '%NOTYPE%', arrTexts[intEventNumber][1], 'label', true, false);
 	let intCounter = 1;
-	
-	
+
+
 	cntTextbox.onclick = function(){
 			intCounter++;
-			
+
 			if (intCounter < arrTexts[intEventNumber].length){lblText.firstChild.nodeValue = setTextParse(cntTextbox, arrTexts[intEventNumber][intCounter]);}
 			else{
 				cntTextbox.remove();
-				
+
 				if (blnShowParameter){
 					setStatus(arrVariables, arrRequests);
 					setTimeout(function() {
-						setCanvas(arrVariables, arrTexts, 1, true, false);
+						setCanvas(arrVariables, arrTexts, 1, 0, true, false);
 					}, 3000);
 				}
 				else {
-					setTimeout(function() {setCanvas(arrVariables, arrTexts, 1, true, false);}, 1);
+					setTimeout(function() {setCanvas(arrVariables, arrTexts, 1, 0, true, false);}, 1);
 				} // End if
 			} // End if
 	};
@@ -456,8 +474,8 @@ function setEvent(arrTexts, intEventNumber, arrRequests, arrVariables, blnShowPa
 
 function setBlink(){
 	imgTenant = document.getElementById('imgTenant');
-	imgTenant.src = 'img_char_tenant_normal_blinking.png';
-	setTimeout(function() {imgTenant.src = 'img_char_tenant_normal.png';
+	imgTenant.src = 'img/char/tenant/normal/blinking.png';
+	setTimeout(function() {imgTenant.src = 'img/char/tenant/normal.png';
 						   setTimeout( function() {setBlink();}, 4000);
 						   }, 130);
 } // End of setBlink function
@@ -475,23 +493,23 @@ function getValidation(arrVariables, arrTexts){
 	// 0] The value's length is equivilant to about 15-22
 	// 1] The value are numbers
 	// 3] The first 16 digits can allow users to continue
-	
+
 	let input = document.getElementById('boxData').value;
-	
+
 	if (input.length >= 15 && input.length <= 22){
 		if (!isNaN(input)) {
 			let arrBrokenedData = [];
 			arrBrokenedData[0] = parseInt(input.substring(0, 13));
 			input = input.substring(13);
-			
+
 			for (let i = 0; i < 3; i++){
 				arrBrokenedData[i+1] = parseInt(input.substring(0, 3));
 				input = input.substring(3);
 			} // End for
-			
+
 			let arrTime = getReadableTime(new Date().getTime() -  arrBrokenedData[0]);
 			let intHours = arrTime[1] + arrTime[0] * 24;
-			
+
 			if (intHours < 100) {
 				for (let i = 0; i < 3; i++) {
 					arrVariables[i] = arrBrokenedData[i+1] - intHours;
@@ -506,23 +524,7 @@ function getValidation(arrVariables, arrTexts){
 	} else {alert('Input is less less than 15 characters, or more than 22.');} // End if
 } // End of getValidation function
 
-function setLoginPage(arrVariables, arrTexts){
-	let cntParent = 			document.getElementById('cntSquare');
-	let cntLogin = 				setElement(cntParent, 'div', 'cntLogin', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
-	let imgAdvocate = 			setElement(cntLogin, 'img', 'imgAdvocate', 'image/png', 'img_char_advocate_normal.png', 'image', false, true);
-	let lblTitle = 				setElement(cntLogin, 'label', 'lblTitle', '%NOTYPE%', 'Welcome', 'label', true, false);
-	let lblParagraph =			setElement(cntLogin, 'label', 'lblParagraph', '%NOTYPE%', 'Provide me your given data card from your last visit:', 'label', true, false);
-	let boxDataCard =			setElement(cntLogin, 'input', 'boxData', 'textbox', '', 'textbox', false, false);
-	let cntButtons =			setElement(cntLogin, 'div', 'cntButtons', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
-	let btnContinue = 			setElement(cntButtons, 'input', 'btnContinue', 'button', 'Here it is!', 'button', false, false); 
-	let btnBack =				setElement(cntButtons, 'input', 'btnBack', 'button', 'Huh?', 'button', false, false);
-	
-	btnContinue.onclick = function(){getValidation(arrVariables, arrTexts);};
-	btnBack.onclick = function(){
-		setEvent(arrTexts, 4, [], arrVariables, false);};
-} // End of setLoginPage function
-
-window.addEventListener('load', function(){ 
+window.addEventListener('load', function(){
 	/* arrVariables Lists -
 		[0] -> intCurEnergy
 		[1] -> intCurHunger
@@ -536,7 +538,7 @@ window.addEventListener('load', function(){
 						100,
 						100,
 						100,
-						100];		
+						100];
 	let arrTexts = [
 				['evt_00',
 				 '[Primary test event]',
@@ -619,9 +621,7 @@ window.addEventListener('load', function(){
 				  'Come on, don\'t be shy.',
 				  '#tenant_center##tenant_shocked#Huh,',
 				  'Huh, why me?',
-				  
-				  
 				 ]
-			   ];  
-	setLoginPage(arrVariables, arrTexts);
+			   ];
+	setCanvas(arrVariables, arrTexts, 1, 1, false, false);
 });

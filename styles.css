@@ -1,5 +1,3 @@
-
-
 * {
 	position: relative;
 	margin: 0;
@@ -11,7 +9,7 @@
 }
 
 body {
-	background-image: url('img_bg_house.png');
+	background-image: url('img/bg/house.png');
 	background-repeat: no-repeat;
 }
 
@@ -58,7 +56,7 @@ body {
 	background-color: transparent;
 }
 
-#cntButtons {
+[id*="cntButtons"] {
 	width: 600px;
 	background-color: transparent;
 	margin-top: 1%;
@@ -86,7 +84,7 @@ body {
 	height: 125px;
 }
 
-#cntLogin > #imgAdvocate, #cntPrompt > #imgAdvocate {
+#cntLogin > #imgAdvocateLogin, #cntPrompt > #imgAdvocateLogout {
 	translate: 390px -800px;
 	transform: translateY(508px);
 	animation-name: pop-in_screen;
@@ -112,7 +110,7 @@ body {
 	z-index: -1;
 }
 
-#cntCommand {
+[id*="cntCommand"] {
 	border: 0;
 	background-color: transparent;
 	width: 60%;
@@ -141,7 +139,7 @@ body {
 	left: 0;
 	right: 0;
 	bottom: -900px;
-	
+
 }
 
 #lblText {
@@ -163,7 +161,7 @@ body {
 }
 
 #imgAdvocate {
-	
+
 }
 
 .label {
