@@ -74,7 +74,7 @@ function setCanvas(arrVariables, arrTexts, intCode, intCodeSecondary, blnRemoveS
 					let cntCommand = 	setElement(document.getElementById('cntSquare'), 'div', 'cntCommand', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
 					let cntStatus =		setElement(cntCommand, 'div', 'cntStatus', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
 					let cntButtonsMain = 	setElement(cntCommand, 'div', 'cntButtonsMain', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
-					let imgTenant = 	setElement(cntParentMain, 'img', 'imgTenant', 'image/png', 'img/char/tenant/normal.png', 'image', false, true);
+					let imgTenant = 	setElement(document.getElementById('cntSquare'), 'img', 'imgTenant', 'image/png', 'img/char/tenant/normal.png', 'image', false, true);
 					let lblEnergy = 	setElement(cntStatus, 'label', 'lblEnergy', '%NOTYPE%', 'Energy: ' + arrVariables[0] + '/' + arrVariables[3], 'label', true, false);
 					let lblHunger = 	setElement(cntStatus, 'label', 'lblHunger', '%NOTYPE%', 'Hunger: ' + arrVariables[1] + '/' + arrVariables[4], 'label', true, false);
 					let	lblSocial =		setElement(cntStatus, 'label', 'lblSocial', '%NOTYPE%', 'Social: ' + arrVariables[2] + '/' + arrVariables[5], 'label', true, false);
@@ -329,6 +329,7 @@ function setButtonFunctionality(arrVariables, arrTexts, arrRequests, intCode, bl
 			setEvent(arrTexts, 0, arrRequests, arrVariables, true);
 			break;
 		default:
+			setCanvas(arrVariables, arrTexts, 1, 2, false, false);
 			break;
 	} // End switch
 } // End of buttonFunctionality function
