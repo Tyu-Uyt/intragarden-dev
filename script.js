@@ -149,7 +149,7 @@ function setTextParse(cntTextbox, stringParameter){
 						'#tenant_happy#',
 						'#tenant_angry#',
 						'#tenant_normal#',
-						'#advocate_read#',
+						'#advocate_card_read#',
 						'#advocate_shocked#',
 						'#advocate_angry#',
 						'#advocate_cry#',
@@ -163,6 +163,8 @@ function setTextParse(cntTextbox, stringParameter){
 						'#tenant_center#',
 						'#tenant_shocked#',
 						'#tenant_sad#',
+						'#advocate_card_shocked#',
+						'#advocate_card_normal#',
 				   ];
 
 	for (let i = 0; i < arrCodes.length; i++) {
@@ -177,53 +179,59 @@ function setTextParse(cntTextbox, stringParameter){
 					setElement(cntTextbox, 'img', 'imgAdvocate', 'image/png', 'img/char/advocate/normal.png', 'image', false, true);
 					break;
 				case 2: // tenant_happy
-					document.getElementById('imgTenant').src = 'img/char/tenant/happy.png';
+					imgTenant.src = 'img/char/tenant/happy.png';
 					break;
 				case 3: // tenant_angry
 					break;
 				case 4: // tenant_normal
 					imgTenant.src = 'img/char/tenant/normal.png';
 					break;
-				case 5: // advocate_read
+				case 5: // advocate_card_read
+					imgAdvocate.src = 'img/char/advocate/card_read.png';
 					break;
 				case 6: // advocate_shocked
-					document.getElementById('imgAdvocate').src = 'img/char/advocate/shocked.png';
+					imgAdvocate.src = 'img/char/advocate/shocked.png';
 					break;
 				case 7: // advocate_angry
-					document.getElementById('imgAdvocate').src = 'img/char/advocate/angry.png';
+					imgAdvocate.src = 'img/char/advocate/angry.png';
 					break;
 				case 8: // advocate_cry
 					break;
 				case 9: // advocate_depressed
 					break;
 				case 10: // advocate_delusional
-					document.getElementById('imgAdvocate').src = 'img/char/advocate/delusional.png';
+					imgAdvocate.src = 'img/char/advocate/delusional.png';
 					break;
 				case 11: // advocate_normal
-					document.getElementById('imgAdvocate').src = 'img/char/advocate/normal.png';
+					imgAdvocate.src = 'img/char/advocate/normal.png';
 					break;
 				case 12: // advocate_left
-					let strCurrentInfo = document.getElementById('imgAdvocate').style.transform;
-					document.getElementById('imgAdvocate').style.transform = strCurrentInfo + ' rotateY(180deg)';
+					let strCurrentInfo = imgAdvocate.style.transform;
+					imgAdvocate.style.transform = strCurrentInfo + ' rotateY(180deg)';
 					break;
 				case 13: // advocate_right
 					break;
 				case 14: // advocate_above
-					let strCurrentInfo01 = document.getElementById('imgAdvocate').style.transform;
-					document.getElementById('imgAdvocate').style.transform = strCurrentInfo01 + 'translateY(-205px) translateX(-80px)';
+					let strCurrentInfo01 = imgAdvocate.style.transform;
+					imgAdvocate.style.transform = strCurrentInfo01 + 'translateY(-205px) translateX(-80px)';
 					break;
 				case 15: // advocate_below
 					break;
 				case 16: // tenant_center
-					let strCurrentInfo02 = document.getElementById('imgTenant').style.transform;
-					document.getElementById('imgTenant').style.transform = strCurrentInfo02 + 'translateX(-250px)';
+					let strCurrentInfo02 = imgTenant.style.transform;
+					imgTenant.style.transform = strCurrentInfo02 + 'translateX(-250px)';
 					break;
 				case 17: // tenant_shocked
-					document.getElementById('imgTenant').src = 'img/char/tenant/shocked.png';
+					imgTenant.src = 'img/char/tenant/shocked.png';
 					break;
 				case 18: // tenant_sad
-					document.getElementById('imgTenant').src = 'img/char/tenant/sad.png';
+					imgTenant.src = 'img/char/tenant/sad.png';
 				 	break;
+				case 19: // advocate_card_shocked
+					imgAdvocate.src = 'img/char/advocate/card_shocked.png';
+					break;
+				case 20: // advocate_card_normal
+					imgAdvocate.src = 'img/char/advocate/card_normal.png';
 			} // End Switch
 		} // End if
 	} // End for
@@ -533,32 +541,32 @@ window.addEventListener('load', function(){
 				 '#tenant_sad#Maybe not.'],
 				['evt_02',
 				 '[Upon successfully entering a passable data card]',
-				 '#advocate##read#Let\'s see here...',
-				 '.',
+				 '#advocate##advocate_card_normal#Let\'s see here...',
+				 '#advocate_card_read#.',
 				 '..',
 				 '...',
-				 '#normal#Yep, all seems is in good order.',
-				 'Welcome back, pal. We\'re glad to see you you\'ve made it!',
+				 '#advocate_card_normal#Yep, all seems is in good order.',
+				 '#advocate_normal#Welcome back, pal. We\'re glad to see you you\'ve made it!',
 				 'Please, make sure you take well care of my friend.'],
 				['evt_03',
 				 '[Upon successfully entering a dead data card]',
-				 '#advocate##advocate_read#Let\'s see here...',
-				 '.',
+				 '#advocate##advocate_card_normal#Let\'s see here...',
+				 '#advocate_card_read#.',
 				 '..',
 				 '...',
-				 '#advocate_shocked#N-No...',
+				 '#advocate_card_shocked#N-No...',
 				 'You\'ve killed my friend...',
 				 'My only one...',
 				 '#advocate_angry#HOW COULD YOU?!',
-				 '#advocate_cry#She trusted that you would protect her.',
+				 'She trusted that you would protect her.',
 				 'She wanted to believe that someone like you could find the answer to her life.',
-				 '#advocate_angry#And now that you\'ve killed her, what is there left for me to do?',
-				 '#advocate_depressed#.',
+				 'And now that you\'ve killed her, what is there left for me to do?',
+				 '.',
 				 '..',
 				 '...',
 				 'I know.',
 				 'I\'ll give you a second chance.',
-				 '#advocate_angry#Normally, I\'m prohibited to give users such privileges, but...',
+				 'Normally, I\'m prohibited to give users such privileges, but...',
 				 'I can\'t let my friend die by such foolish negligence from you.',
 				 '#advocate_normal#This is your warning, pal.',
 				 'If you give me another data card like this...',
@@ -612,8 +620,7 @@ window.addEventListener('load', function(){
 			 	 'Why are you looking at me like that?',
 			   '#tenant_normal#Oh!',
 			   'Oh! You wanted me to say something, right?',
-			   '#tenant_sad#Yeah...',
-			 	 'Yeah... about that...',
+			   '#tenant_sad#Yeah, about that...',
 			   'I have got nothing else to say, pal.',
 			   '#tenant_normal#But, if you were looking to make my mood better...',
 			   '#tenant_happy#Then hey, thank you very much!']
