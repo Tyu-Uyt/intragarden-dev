@@ -60,12 +60,11 @@ function setDeath(){
 	document.body.style.backgroundImage = 'none';
 	document.body.style.backgroundColor = 'black';
 	cntSquare.style.backgroundColor = 'black';
-	cntCommand.remove();
-	imgTenant.src = 'img/char/tenant/dying.png';
+	setCanvas([], [], 0, 0, true, false);
+	let imgTenant = setElement(cntSquare, 'img', 'imgTenant', 'image/png', 'img/char/tenant/dying.png', 'image', false, true);
 	setTimeout(function() {imgTenant.remove();}, 1500);
-
 	setTimeout(function() {
-		let lblDeath = setElement(cntsquare, 'label', 'lblDeath', '%NOTYPE%', 'Unfortunately, your tenant has deceased.', 'label', true, false);
+		let lblDeath = setElement(cntSquare, 'label', 'lblDeath', '%NOTYPE%', 'Unfortunately, your tenant has deceased.', 'label', true, false);
 	}, 4000);
 } // End of setDeath function
 
@@ -317,11 +316,17 @@ function getValidation(arrVariables, arrTexts){
 				for (let i = 0; i < 3; i++) {
 					arrVariables[i] = arrBrokenedData[i+1] - intHours;
 					if (arrVariables[i] <= 0) {
+						arrVariables[0] = 100;
+						arrVariables[1] = 100;
+						arrVariables[2] = 100;
 						setEvent(arrVariables, arrTexts, [], 3, false);
 						break;
+					}
+					else if (i == 2) {
+						setEvent(arrVariables, arrTexts, [], 2,  false);
 					} // End if
 				} // End for
-				setEvent(arrVariables, arrTexts, [], 2,  false);
+
 			} else {setEvent(arrVariables, arrTexts, [], 3, false);} // End if
 		} else {alert('Input is not numeric.');} // End if
 	} else {alert('Input is less less than 15 characters, or more than 22.');} // End if
