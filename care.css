@@ -1,16 +1,15 @@
 * {
 	position: relative;
-	margin: 0;
+	margin: auto;
 	padding: 0;
 	font-size: 20px;
 	font-family: Lucida Sans;
-	margin: auto;
 	text-align: center;
 }
 
 body {
-	background-image: url('img/bg/house.png');
-	background-repeat: no-repeat;
+	overflow: hidden;
+	margin: 0;
 }
 
 .button {
@@ -26,6 +25,8 @@ body {
 	height: 35px;
 	border: 6px solid black;
 	border-radius: 0px 0px 100px 100px;
+	max-width: 100%;
+	max-height: 100%;
 }
 
 .textbox {
@@ -69,10 +70,10 @@ body {
 #cntLogin, #cntPrompt {
 	width: 600px;
 	height: 100px;
-	position: absolute;
-	bottom: -500px;
+	position: relative;
 	left: 0;
 	right: 0;
+	margin-top: 50vh;
 }
 
 #lblDeath {
@@ -85,28 +86,28 @@ body {
 }
 
 #cntLogin > #imgAdvocateLogin, #cntPrompt > #imgAdvocateLogout {
-	translate: 390px -800px;
-	transform: translateY(508px);
+	transform: translate(30vh, -288px);
 	animation-name: pop-in_screen;
 	animation-duration: 0.5s;
 }
 
 @keyframes pop-in_screen {
 	0% {
-		transform: translateY(-1000px);
+		transform: translate(30vh, -1000px);
 	}
 	100% {
-		transform: translateY(508px);
+		transform: translate(30vh, -288px);
 	}
 }
 
 #cntTextbox > #imgAdvocate {
-	translate: 845px -85px;
-	z-index: 1;
+	transform: translate(0vh, -245px);
+	right: 0;
+	z-index: -1;
 }
 
 #cntTextbox > #imgTenant {
-	translate: 670px -290px;
+	transform: translate(40vw, -330px);
 	z-index: -1;
 }
 
@@ -135,11 +136,12 @@ body {
 	border-radius: 0 0 0 0;
 	width: 1000px;
 	height: 200px;
-	position: absolute;
-	left: 0;
-	right: 0;
-	bottom: -900px;
+	position: relative;
+	/*! left: 0; */
+	/*! right: 0; */
+	/*! bottom: -900px; */
 
+	margin: 75vh auto 0 auto;
 }
 
 #lblText {
