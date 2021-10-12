@@ -25,19 +25,19 @@ function setElement(cntParent, strElement, strID, strType, strValue, strClass, b
 } // End of setElement function
 
 function buttonLayout(){
-	setElement(cntCommand, 'img', 'imgLeave', 'image/png', 'leave.png', 'image', false, true);
-	setElement(cntCommand, 'img', 'imgGuard', 'image/png', 'guard.png', 'image', false, true);
-	setElement(cntCommand, 'img', 'imgFight', 'image/png', 'fight.png', 'image', false, true);
+	setElement(cntBattleCommand, 'img', 'imgLeave', 'image/png', 'img/ugi/battle/leave.png', 'image', false, true);
+	setElement(cntBattleCommand, 'img', 'imgGuard', 'image/png', 'img/ugi/battle/guard.png', 'image', false, true);
+	setElement(cntBattleCommand, 'img', 'imgFight', 'image/png', 'img/ugi/battle/fight.png', 'image', false, true);
 	
 	imgFight.onclick = function() {
-		removeContent(cntCommand);
-		setElement(cntCommand, 'img', 'imgBack', 'image/png', 'back.png', 'image', false, true);
-		setElement(cntCommand, 'img', 'imgSpeak', 'image/png', 'speech.png', 'image', false, true);
-		setElement(cntCommand, 'img', 'imgMagic', 'image/png', 'magic.png', 'image', false, true);
-		setElement(cntCommand, 'img', 'imgBrawl', 'image/png', 'brawl.png', 'image', false, true);
+		removeContent(cntBattleCommand);
+		setElement(cntBattleCommand, 'img', 'imgBack', 'image/png', 'img/ugi/battle/back.png', 'image', false, true);
+		setElement(cntBattleCommand, 'img', 'imgSpeak', 'image/png', 'img/ugi/battle/speech.png', 'image', false, true);
+		setElement(cntBattleCommand, 'img', 'imgMagic', 'image/png', 'img/ugi/battle/magic.png', 'image', false, true);
+		setElement(cntBattleCommand, 'img', 'imgBrawl', 'image/png', 'img/ugi/battle/brawl.png', 'image', false, true);
 			
 		imgBack.onclick = function() {
-			removeContent(cntCommand);
+			removeContent(cntBattleCommand);
 			buttonLayout();
 		}
 		
@@ -105,7 +105,7 @@ function endTurn(intP1Decision) {
 	let arrInLineDecision = [];
 	let intP2Decision;
 	
-	removeContent(cntCommand);
+	removeContent(cntBattleCommand);
 	
 	// Have AI make a decision
 	while (blnCanProceed == false){
@@ -157,7 +157,8 @@ function endTurn(intP1Decision) {
 
 	
 	
-	if (arrP1[0] <= 0 || arrP2[0] <= 0 || arrP1[2] <= 0 || arrP2[2] <= 0){
+	if (arrP1[0] <= 0 || arrP2[0] <= 0 || arrP1[2] <= 0 || arrP2[2] <= 0) {
+		audBattle.pause();
 		if (arrP1[0] <= 0) {
 			alert('P2 Won; P1 lost by health');
 		} else if (arrP1[2] <= 0) {
@@ -167,14 +168,16 @@ function endTurn(intP1Decision) {
 		} else {
 			alert('P1 Won; P2 lost by mental');
 		}
+
 		
-		setTimeout(function() {
-			setElement(document.body, 'div', 'fadeOut', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
-		}, 3000);
-		
-		setTimeout(function() {
-			removeContent(document.body);
-		}, 4000);
+		setTimeout(function () {
+			setFade(false);
+		}, 800);
+
+		setTimeout(function () {
+			startMenu();
+		}, 2000);
+
 	} else {
 		// Count a turn
 		arrGeneral[0] += 1;
@@ -191,12 +194,16 @@ function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
 
-function removeContent(cntParent){
-		while (cntParent.firstChild) {
-			cntParent.removeChild(cntParent.firstChild);
-		} // End while
-}
-
 function startBattle() {
+	setElement(document.body, 'audio', 'audBattle', 'audio/ogg', 'aud/battle.ogg', '<NOCLASS>', false, true, true);
+	setElement(document.body, 'div', 'cntBattlePattern', '%NOTYPE%', '%NOVALUE%', 'pattern', false, false);
+	setElement(cntBattlePattern, 'div', 'cntBattleTopPattern', '%NOTYPE%', '%NOVALUE%', 'pattern', false, false);
+	setElement(cntBattlePattern, 'div', 'cntBattleBottomPattern', '%NOTYPE%', '%NOVALUE%', 'pattern', false, false);
+	setElement(document.body, 'img', 'imgBattleFoe', 'image/png', 'img/char/foe/foe.png', 'image', false, true);
+	setElement(document.body, 'img', 'imgBattleTenant', 'image/png', 'img/char/tenant/battle/normal.png', 'image', false, true);
+	setElement(document.body, 'img', 'imgBattleAdvocate', 'image/png', 'img/char/advocate/battle/normal.png', 'image', false, true);
+	setElement(document.body, 'div', 'cntBattleCommand', '%NOTYPE%', '%NOVALUE%', '%NOCLASS%', false, false);
 	buttonLayout();
+	setFade(true);
+	audBattle.play();
 }

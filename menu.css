@@ -1,3 +1,16 @@
-﻿body {
-    background-image: url('img/bg/menu/bg.png');
+﻿#cntMenuSelection {
+    width: 50vh;
+    height: 50vh;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 25vh;
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+}
+
+#cntMenuSelection > img {
+    position: relative;
+    height: 20vh;
 }

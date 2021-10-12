@@ -33,12 +33,12 @@ function setDeath(){
 	setStopIntervals();
 	document.body.style.backgroundImage = 'none';
 	document.body.style.backgroundColor = 'black';
-	cntSquare.style.backgroundColor = 'black';
+	document.body.style.backgroundColor = 'black';
 	setCanvas([], [], 0, 0, true, false);
-	let imgTenant = setElement(cntSquare, 'img', 'imgTenant', 'image/png', 'img/char/tenant/dying.png', 'image', false, true);
+	let imgTenant = setElement(document.body, 'img', 'imgTenant', 'image/png', 'img/char/tenant/dying.png', 'image', false, true);
 	setTimeout(function() {imgTenant.remove();}, 1500);
 	setTimeout(function() {
-		let lblDeath = setElement(cntSquare, 'label', 'lblDeath', '%NOTYPE%', 'Unfortunately, your tenant has deceased.', 'label', true, false);
+		let lblDeath = setElement(document.body, 'label', 'lblDeath', '%NOTYPE%', 'Unfortunately, your tenant has deceased.', 'label', true, false);
 	}, 4000);
 } // End of setDeath function
 
@@ -53,7 +53,7 @@ function setStatus(arrVariables, arrRequests){
 	//	Is it correct to call the modifier value modifiee?
 	//	For each given status and the desired modifiee
 	let counter = -1;
-	let cntParameter = setElement(cntSquare, 'div', 'cntParameter', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
+	let cntParameter = setElement(document.body, 'div', 'cntParameter', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
 
 	for (let i = 0; i < arrRequests.length - 1; i += 2){
 		let tmpStatus = "";
@@ -211,7 +211,7 @@ function setTextParse(cntTextbox, stringParameter){
 
 function setEvent(arrVariables, arrTexts, arrRequests, intEventNumber, blnShowParameter){
 	setCanvas(arrVariables, arrTexts, 0, 0, true, false);
-	let cntTextbox = 	setElement(cntSquare, 'div', 'cntTextbox', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
+	let cntTextbox = 	setElement(document.body, 'div', 'cntTextbox', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
 	let imgArrow = 		setElement(cntTextbox, 'img', 'imgArrow', 'image/png', 'img/ugi/arrow.png', 'image', false, true);
 	let lblText =		setElement(cntTextbox, 'label', 'lblText', '%NOTYPE%', arrTexts[intEventNumber][1], 'label', true, false);
 	let intCounter = 1;
@@ -315,7 +315,7 @@ function setButtonFunctionality(arrVariables, arrTexts, arrRequests, intCode, bl
 	//	Motive	-	Part of RAD translation
 
 	setCanvas(arrVariables, arrTexts, 0, 0, true, false);
-	let imgTenant = 	setElement(cntSquare, 'img', 'imgTenant', 'image/png', 'img/char/tenant/normal.png', 'image', false, true);
+	let imgTenant = 	setElement(document.body, 'img', 'imgTenant', 'image/png', 'img/char/tenant/normal.png', 'image', false, true);
 
 	//	Associate the button as:
 	//	[0]	Eating
@@ -363,7 +363,7 @@ function setCanvas(arrVariables, arrTexts, intCode, intCodeSecondary, blnRemoveS
 
 	if (blnRemoveScreen) {
 		setStopIntervals();
-		let cntParent = cntSquare;
+		let cntParent = document.body;
 		while (cntParent.firstChild) {
 			cntParent.removeChild(cntParent.firstChild);
 		} // End while
@@ -375,10 +375,10 @@ function setCanvas(arrVariables, arrTexts, intCode, intCodeSecondary, blnRemoveS
 		case 1: // Draw a canvas
 			switch (intCodeSecondary) {
 				case 0: // Main
-					let cntCommand = 	setElement(cntSquare, 'div', 'cntCommand', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
+					let cntCommand = 	setElement(document.body, 'div', 'cntCommand', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
 					let cntStatus =		setElement(cntCommand, 'div', 'cntStatus', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
 					let cntButtonsMain = 	setElement(cntCommand, 'div', 'cntButtonsMain', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
-					let imgTenant = 	setElement(cntSquare, 'img', 'imgTenant', 'image/png', 'img/char/tenant/normal.png', 'image', false, true);
+					let imgTenant = 	setElement(document.body, 'img', 'imgTenant', 'image/png', 'img/char/tenant/normal.png', 'image', false, true);
 					let lblEnergy = 	setElement(cntStatus, 'label', 'lblEnergy', '%NOTYPE%', 'Energy: ' + arrVariables[0] + '/' + arrVariables[3], 'label', true, false);
 					let lblHunger = 	setElement(cntStatus, 'label', 'lblHunger', '%NOTYPE%', 'Hunger: ' + arrVariables[1] + '/' + arrVariables[4], 'label', true, false);
 					let	lblSocial =		setElement(cntStatus, 'label', 'lblSocial', '%NOTYPE%', 'Social: ' + arrVariables[2] + '/' + arrVariables[5], 'label', true, false);
@@ -398,7 +398,7 @@ function setCanvas(arrVariables, arrTexts, intCode, intCodeSecondary, blnRemoveS
 					setInterval(function(){getBackgroundUpdate(arrVariables, arrTexts)}, 7500);
 					break;
 				case 1: // Login
-					let cntLogin = 				setElement(cntSquare, 'div', 'cntLogin', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
+					let cntLogin = 				setElement(document.body, 'div', 'cntLogin', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
 					let imgAdvocateLogin = 			setElement(cntLogin, 'img', 'imgAdvocateLogin', 'image/png', 'img/char/advocate/normal.svg', 'image', false, true);
 					let lblTitleLogin = 				setElement(cntLogin, 'label', 'lblTitle', '%NOTYPE%', 'Welcome', 'label', true, false);
 					let lblParagraphLogin =			setElement(cntLogin, 'label', 'lblParagraphLogin', '%NOTYPE%', 'Provide me your given data card from your last visit:', 'label', true, false);
@@ -412,7 +412,7 @@ function setCanvas(arrVariables, arrTexts, intCode, intCodeSecondary, blnRemoveS
 						setEvent(arrVariables, arrTexts, [], 4, false);};
 					break;
 				default: // Logout
-					let cntPrompt = 	setElement(cntSquare, 'div', 'cntPrompt', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
+					let cntPrompt = 	setElement(document.body, 'div', 'cntPrompt', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
 					let imgAdvocateLogout =	setElement(cntPrompt, 'img', 'imgAdvocateLogout', 'image/png', 'img/char/advocate/normal.png', 'image', false, true);
 					let lblTitleLogout = setElement(cntPrompt, 'label', 'lblTitle', '%NOTYPE%', 'Aww, leaving already?', 'label', true, false);
 					let lblParagraphLogout = setElement(cntPrompt, 'label', 'lblParagraphLogout', '%NOTYPE%', 'Before you go, here is our data card. Please don\'t forget about our existance!', 'label', true, false);
@@ -452,7 +452,7 @@ function getBackgroundUpdate(arrVariables, arrTexts){
 } // End of getBackgroundUpdate function
 
 function setCountdown(intSeconds){
-	let cntParameter = setElement(cntSquare, 'div', 'cntParameter', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
+	let cntParameter = setElement(document.body, 'div', 'cntParameter', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
 	let lblCountdown = setElement(cntParameter, 'label', 'lblCountdown', '%NOTYPE%', 'Starting countdown', 'label', true, false);
 	let dteDeadline = new Date();
 
@@ -489,4 +489,5 @@ function setCountdown(intSeconds){
 
 function startCare() {
 	setCanvas(arrVariables, arrTexts, 1, 1, false, false);
+	setFade(true);
 }

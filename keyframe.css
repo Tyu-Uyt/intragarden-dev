@@ -1,0 +1,29 @@
+﻿@keyframes fade-out {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes pop-in_screen {
+    0% {
+        transform: translate(3vh, -1000px);
+    }
+
+    100% {
+        transform: translate(3vh, -288px);
+    }
+}

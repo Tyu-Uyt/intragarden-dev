@@ -1,0 +1,22 @@
+﻿#cntWorldBackground {
+    width: 200vw;
+    height: 200vh;
+    background-image: url('img/bg/world/playground/bg.png');
+    position: absolute;
+}
+
+#cntWorldBase {
+    width: 192px;
+    height: 192px;
+    top: 50vh;
+    background-color: red;
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+    grid-template-columns: 64px 64px 64px;
+    justify-content: center;
+}
+
+#imgWorldTenant {
+    position: absolute;
+}

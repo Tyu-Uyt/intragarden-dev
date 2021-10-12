@@ -1,4 +1,12 @@
 ﻿// *************************
+// ***** For General Info **
+// *************************
+const TITLE = "Intragarden"
+const EDITION = "Dev"
+const BRANCH = "Master"
+// *************************
+
+// *************************
 // ***** For care.js *******
 // *************************
 /* arrVariables Lists -
@@ -137,4 +145,16 @@ const DECISIONS = [0, 1, 2, 3];
 // ***** For p2p.js ********
 // *************************
 let p2pConn;
+let p2pPeer = new Peer();
+// *************************
+
+
+// *************************
+// ***** For cursor.js ********
+// *************************
+let intCursorX;
+let intCursorY;
+let intCursorPX = 0;
+let intCursorPY = 0;
+//let blnMutex = false;
 // *************************

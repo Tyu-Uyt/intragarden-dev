@@ -1,49 +1,15 @@
-body
-{
-	margin: 0;
-	overflow: hidden;
-}
-
-.pattern {
-	height: 100vh;
-	width: 100vw;
-	transform-style: preserve-3d;
-	position:absolute;
-	perspective: 100px;
-	rotate: 0.1rad;
-}
-
-#topPattern {
-	background: url('imageUp.gif');
+#cntBattleTopPattern {
+	background: url('img/bg/battle/up.gif');
 	transform: rotateX(100deg);
 }
 
-#bottomPattern
+#cntBattleBottomPattern
 {
-	background: url('imageDown.gif');
+	background: url('img/bg/battle/down.gif');
 	transform: rotateX(80deg);
 }
 
-#fadeOut{
-	background-color: black;
-	width:100vw;
-	height:100vh;
-	position: absolute;
-	opacity: 1;
-	animation-name: fade-out;
-	animation-duration: 0.5s;
-}
-
-@keyframes fade-out {
-	0% {
-		opacity: 0;
-	}
-	100% {
-		opacity: 1;
-	}
-}
-
-#foe
+#imgBattleFoe
 {
 	transform: translateY(0px) translateX(0px);
 	left: 50%;
@@ -54,7 +20,7 @@ body
 	margin-top: -96.5px;
 }
 
-#tenant{
+#imgBattleTenant{
 	transform: translateY(0px) translateX(0px);
 	left: 50%;
 	top: 85%;
@@ -62,9 +28,10 @@ body
 	height: 407px;
 	margin-left: -98.5px;
 	margin-top: -203.5px;
+	z-index: 2;
 }
 
-#advocate {
+#imgBattleAdvocate {
 	transform: translateY(0px) translateX(0px);
 	width: 110px;
 	height: 154px;
@@ -72,9 +39,10 @@ body
 	top: 93%;
 	margin-left: -55px;
 	margin-top: -77px;
+	z-index: 3;
 }
 
-#cntCommand
+#cntBattleCommand
 {
 	height: 0;
 	position: absolute;
@@ -84,14 +52,9 @@ body
 	display: flex;
 	flex-flow: column wrap;
 	justify-content: center;
+	z-index: 4;
 }
 
-#cntCommand > img {
+#cntBattleCommand > img {
 	position: relative;
-	
-}
-
-.images {
-	position: absolute;
-	transform: translateY(0px) translateX(0px);
 }

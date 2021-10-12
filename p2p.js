@@ -1,11 +1,3 @@
-let p2pPeer = new Peer({
-	'config': {
-	iceServers: [{
-		urls: 'stun:stun.l.google.com:19302'
-	}]
-	}
-});
-
 function connectTo(value, intCode) {
 	// on open will be launch when you successfully connect to PeerServer
 	
@@ -39,6 +31,8 @@ function connectFrom(conn, data) {
 
 function startP2P() {
 	// For whatever reason, it needs a little more time before the ID can be used
+
+
 	setTimeout(function () {
 		let lblIDNum = document.createElement('label');
 		lblIDNum.appendChild(document.createTextNode(p2pPeer._id));
@@ -59,4 +53,6 @@ function startP2P() {
 			connectFrom(conn, data);
 		});
 	});
+
+	setFade(true);
 }
