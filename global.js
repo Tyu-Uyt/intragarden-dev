@@ -4,6 +4,14 @@
 const TITLE = "Intragarden"
 const EDITION = "Dev"
 const BRANCH = "Master"
+
+// Modes -
+//	0: Menu
+//  1: Care
+//	2: Battle
+//	3: World
+
+let intMode = 0;
 // *************************
 
 // *************************
@@ -152,9 +160,13 @@ let p2pPeer = new Peer();
 // *************************
 // ***** For cursor.js ********
 // *************************
-let intCursorX;
-let intCursorY;
+let intCursorX = 0;
+let intCursorY = 0;
 let intCursorPX = 0;
 let intCursorPY = 0;
-//let blnMutex = false;
+let intCursorLoggedX = 0;
+let intCursorLoggedY = 0;
+let blnMouseDown = false;
+let blnMutex = false;
+let intCursorDownCounter = 0;
 // *************************

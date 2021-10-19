@@ -9,14 +9,33 @@
     width: 192px;
     height: 192px;
     top: 50vh;
+    z-index:1;
+}
+
+#cntWorldBaseCollision {
+    width: 320px;
+    height: 320px;
+    top: 50vh;
+}
+
+.tile {
     background-color: red;
     display: flex;
     flex-wrap: wrap;
     position: relative;
     grid-template-columns: 64px 64px 64px;
-    justify-content: center;
+}
+
+#cntWorldImgProtector {
+    position: absolute;
+    top: 0;
+    width: 200vw;
+    height: 200vh;
 }
 
 #imgWorldTenant {
     position: absolute;
+    transform: translateX(0px) translateY(0px);
+    transition: none;
+    user-select: none;
 }

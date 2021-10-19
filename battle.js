@@ -1,29 +1,3 @@
-function setElement(cntParent, strElement, strID, strType, strValue, strClass, blnCreateText, blnIsPicture){
-
-	let tmpElement = document.createElement(strElement);
-
-
-	if (blnCreateText) {
-		let tmpText = document.createTextNode(strValue);
-		tmpElement.append(tmpText);
-	} // End if
-
-	if (blnIsPicture) {
-		tmpElement.src = strValue;
-		cntParent.prepend(tmpElement);
-	}
-	else {
-		tmpElement.setAttribute('value', strValue);
-		cntParent.append(tmpElement);
-	} // End if
-
-	tmpElement.setAttribute('id', strID);
-	tmpElement.setAttribute('type', strType);
-	tmpElement.setAttribute('class', strClass);
-
-	return tmpElement;
-} // End of setElement function
-
 function buttonLayout(){
 	setElement(cntBattleCommand, 'img', 'imgLeave', 'image/png', 'img/ugi/battle/leave.png', 'image', false, true);
 	setElement(cntBattleCommand, 'img', 'imgGuard', 'image/png', 'img/ugi/battle/guard.png', 'image', false, true);
@@ -195,6 +169,8 @@ function getRandomInt(max) {
 }
 
 function startBattle() {
+	setCursor();
+	intMode = 3;
 	setElement(document.body, 'audio', 'audBattle', 'audio/ogg', 'aud/battle.ogg', '<NOCLASS>', false, true, true);
 	setElement(document.body, 'div', 'cntBattlePattern', '%NOTYPE%', '%NOVALUE%', 'pattern', false, false);
 	setElement(cntBattlePattern, 'div', 'cntBattleTopPattern', '%NOTYPE%', '%NOVALUE%', 'pattern', false, false);
