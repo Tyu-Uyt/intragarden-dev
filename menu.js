@@ -1,5 +1,5 @@
 ﻿window.addEventListener('load', function () {
-    startWorld();
+    startMenu();
 });
 
 function startMenu() {

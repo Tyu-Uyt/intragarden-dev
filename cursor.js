@@ -148,7 +148,7 @@ window.addEventListener("mousemove", function (e) {
             (charMov[1] >= DEADZONE || charMov[1] <= -DEADZONE)) {
 
             checkDirection(char, charMov, directions, degrees, SPEED);
-            checkCollision(char, SPEED);
+
             setCharImg(directions);
 
             imgWorldTenant.style.transform = 'translateX(' + char[0] + 'px) translateY(' + char[1] + 'px)';
