@@ -5,7 +5,6 @@
 function startMenu() {
     intMode = 0;
     setFade(true);
-    setCursor();
     setElement(document.body, 'audio', 'audMenu', 'audio/ogg', 'aud/menu.ogg', '<NOCLASS>', false, true, true);
     setElement(document.body, 'audio', 'audStart', 'audio/ogg', 'aud/start.ogg', '<NOCLASS>', false, true, true);
     setElement(document.body, 'div', 'cntMenuSelection', '<NOTYPE>', '<NOVALUE>', '<NOCLASS>', false, false);

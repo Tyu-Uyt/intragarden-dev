@@ -488,7 +488,6 @@ function setCountdown(intSeconds){
 } // End of setCountdown function
 
 function startCare() {
-	setCursor();
 	intMode = 1;
 	setCanvas(arrVariables, arrTexts, 1, 1, false, false);
 	setFade(true);

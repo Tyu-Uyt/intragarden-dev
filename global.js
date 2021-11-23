@@ -156,17 +156,7 @@ let p2pConn;
 let p2pPeer = new Peer();
 // *************************
 
-
 // *************************
-// ***** For cursor.js ********
+// ***** For keyboard.js ***
 // *************************
-let intCursorX = 0;
-let intCursorY = 0;
-let intCursorPX = 0;
-let intCursorPY = 0;
-let intCursorLoggedX = 0;
-let intCursorLoggedY = 0;
-let blnMouseDown = false;
-let blnMutex = false;
-let intCursorDownCounter = 0;
-// *************************
+let arrKeys = [];

@@ -169,7 +169,6 @@ function getRandomInt(max) {
 }
 
 function startBattle() {
-	setCursor();
 	intMode = 3;
 	setElement(document.body, 'audio', 'audBattle', 'audio/ogg', 'aud/battle.ogg', '<NOCLASS>', false, true, true);
 	setElement(document.body, 'div', 'cntBattlePattern', '%NOTYPE%', '%NOVALUE%', 'pattern', false, false);
