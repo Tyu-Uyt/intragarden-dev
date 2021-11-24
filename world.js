@@ -13,7 +13,8 @@
     setFade(true);
     audPlayground.play();
 
-    setInterval(function () { setCharImg() }, 1);
+   
+    setInterval(function () { setWorldUpdate() }, 1);
 }
 
 function setWorldBaseTiles() {
@@ -32,6 +33,8 @@ function setWorldBaseTiles() {
 function setWorldBaseTilesCollision() {
     setElement(document.body, 'div', 'cntWorldBaseCollision', '<NOTYPE>', '<NOVALUE>', 'tile', false, false);
     cntWorldBaseCollision.style.transform = 'translateX(0px) translateY(-256px)';
+
+
 
     setElement(cntWorldBaseCollision, 'img', 'imgWBC000C', 'image/png', 'img/bg/world/playground/collision/collision.png', '<NOCLASS>', false, true);
     setElement(cntWorldBaseCollision, 'img', 'imgWBC001C', 'image/png', 'img/bg/world/playground/collision/collision.png', '<NOCLASS>', false, true);
@@ -60,10 +63,18 @@ function setWorldBaseTilesCollision() {
     setElement(cntWorldBaseCollision, 'img', 'imgWBC024C', 'image/png', 'img/bg/world/playground/collision/collision.png', '<NOCLASS>', false, true);
 }
 
-function setCharImg() {
+function setWorldUpdate() {
     let arrTenantMovement = [parseInt(imgWorldTenant.style.transform.split(' ')[0].match(/[-]?\d+/)),
-    parseInt(imgWorldTenant.style.transform.split(' ')[1].match(/[-]?\d+/))];
+                             parseInt(imgWorldTenant.style.transform.split(' ')[1].match(/[-]?\d+/))];
+    let arrPassableMovements = [true, true, true, true]
 
+    checkCollision(arrPassableMovements);
+    setCharImg(arrTenantMovement, arrPassableMovements);
+
+    imgWorldTenant.style.transform = 'translateX(' + arrTenantMovement[0] + 'px) translateY(' + arrTenantMovement[1] + 'px)';
+}
+
+function setCharImg(arrTenantMovement, arrPassableMovements) {
     // Check if the respective inclusion should have images be mapped
 
     if (arrKeys.includes('ArrowUp')) {
@@ -90,44 +101,69 @@ function setCharImg() {
 
     // Check if the respective inclusion should have Tenant be moving
 
-    if (arrKeys.includes('ArrowUp')) {
-        arrTenantMovement[1] -= 3
+    if (arrKeys.includes('ArrowUp') && arrPassableMovements[0]) {
+            arrTenantMovement[1] -= 3
     }
 
-    if (arrKeys.includes('ArrowDown')) {
-        arrTenantMovement[1] += 3
+    if (arrKeys.includes('ArrowDown') && arrPassableMovements[1]) {
+            arrTenantMovement[1] += 3
     }
 
-    if (arrKeys.includes('ArrowLeft')) {
-        arrTenantMovement[0] -= 3
+    if (arrKeys.includes('ArrowLeft') && arrPassableMovements[2]) {
+            arrTenantMovement[0] -= 3
     }
 
-    if (arrKeys.includes('ArrowRight')) {
-        arrTenantMovement[0] += 3
+    if (arrKeys.includes('ArrowRight') && arrPassableMovements[3]) {
+            arrTenantMovement[0] += 3
     }
-
-    imgWorldTenant.style.transform = 'translateX(' + arrTenantMovement[0] + 'px) translateY(' + arrTenantMovement[1] + 'px)';
 }
 
-function checkCollision(char, SPEED) {
+function checkCollision(arrPassableMovements) {
     let childrens = cntWorldBaseCollision.children;
     let tenantDOM = imgWorldTenant.getBoundingClientRect();
 
+    // For number of tiles set in the collision world
     for (let i = 0; i < childrens.length; i++) {
+
+        // Get the HTML element of that tile 
         let childrenElement = document.getElementById(childrens[i].id);
+
+        // Get the JavaScript DOM object of that tile
         let childrenDOM = childrenElement.getBoundingClientRect();
 
+        // If that tile's last fixed character ends with C
         if (childrens[i].id.substring(9) == 'C') {
-            if (tenantDOM.top < childrenDOM.bottom) {
-                char[1] += SPEED;
-            } else if (tenantDOM.bottom > childrenDOM.top) {
-                char[1] += -SPEED;
-            }
 
-            if (tenantDOM.left < childrenDOM.right) {
-                char[0] += SPEED;
-            } else if (tenantDOM.right > childrenDOM.left) {
-                char[0] += -SPEED;
+            /*
+             * Offsets for tenantDOM is used to accomidate the actual
+             * picture boundary. In other words, since all world-related
+             * assets are 64x64 and Tenant is visually shown smaller than that,
+             * we use offsets to not evaluate the extra spaces that Tenant
+             * has.
+             */
+
+            if (Math.abs(tenantDOM.x - childrenDOM.x) * 2 < (tenantDOM.width + childrenDOM.width) &&
+                Math.abs(tenantDOM.y - childrenDOM.y) * 2 < (tenantDOM.height + childrenDOM.height)) {
+
+                // Checks for up. Else, down.
+                if (tenantDOM.bottom - childrenDOM.bottom > 0 &&
+                    tenantDOM.top - childrenDOM.top > 0) {
+                    arrPassableMovements[0] = false;
+
+                } else if (tenantDOM.bottom - childrenDOM.bottom < 0 &&
+                    tenantDOM.top - childrenDOM.top < 0) {
+                    arrPassableMovements[1] = false;
+                }
+
+                // Checks for left. Else, right.
+                if (tenantDOM.left - childrenDOM.left > 0 &&
+                    tenantDOM.right - childrenDOM.right > 0) {
+                    arrPassableMovements[2] = false;
+                } else if (tenantDOM.left - childrenDOM.left < 0 &&
+                    tenantDOM.right - childrenDOM.right < 0) {
+                    arrPassableMovements[3] = false;
+                }
+
             }
         }
     }

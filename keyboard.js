@@ -18,6 +18,5 @@ document.addEventListener('keyup', (event) => {
 
     if (intMode == 3) {
         arrKeys.splice(arrKeys.indexOf(event.key), 1);
-        console.log(arrKeys);
     }
 }, false);
