@@ -209,10 +209,13 @@ function setTextParse(cntTextbox, stringParameter){
 	return stringParameter;
 } // End of setEmotion function
 
+/*
+ * TODO: Migrate Care.js to be a component to World.js
+ */
+
 function setEvent(arrVariables, arrTexts, arrRequests, intEventNumber, blnShowParameter){
 	setCanvas(arrVariables, arrTexts, 0, 0, true, false);
 	let cntTextbox = 	setElement(document.body, 'div', 'cntTextbox', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
-	let imgArrow = 		setElement(cntTextbox, 'img', 'imgArrow', 'image/png', 'img/ugi/arrow.png', 'image', false, true);
 	let lblText =		setElement(cntTextbox, 'label', 'lblText', '%NOTYPE%', arrTexts[intEventNumber][1], 'label', true, false);
 	let intCounter = 1;
 

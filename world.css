@@ -5,21 +5,25 @@
     position: absolute;
 }
 
-#cntWorldBase {
-    top: 25vh;
-    z-index:1;
+#cntBase {
+    z-index: 1;
 }
 
-#cntWorldBaseCollision {
-    top: 25vh;
+#cntEvents {
+    z-index: 2;
+}
+
+#cntCollision, #cntEvents {
+    visibility: visible;
 }
 
 .tile {
-    background-color: red;
     display: flex;
     flex-wrap: wrap;
-    position: relative;
     grid-template-columns: 64px 64px 64px;
+    position:absolute;
+    top: 50vh;
+    left: 50vw;
 }
 
 #cntWorldImgProtector {
@@ -34,4 +38,6 @@
     transform: translateX(0px) translateY(0px);
     transition: none;
     user-select: none;
+    top: 50vh;
+    left: 50vw;
 }
