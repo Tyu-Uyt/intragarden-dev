@@ -1,77 +1,252 @@
 ﻿function startWorld() {
+    // Set to world mode
     intMode = 3;
-    setElement(document.body, 'audio', 'audPlayground', 'audio/ogg', 'aud/playground.ogg', '<NOCLASS>', false, true);
+
+    // Create a background image
     setElement(document.body, 'div', 'cntWorldBackground', '<NOTYPE>', '<NOVALUE>', '<NOCLASS>', false, false);
-   
-    setWorldBaseTiles();
-    setWorldBaseTilesCollision();
 
+    // TEMPORARILY: Set the level to zero
+    let intLevel = 0;
+
+    // Create a world object that has all information
+    // necessary to process
+    let objWorld = {
+        0: {
+            info: {
+                width: 10 * 64,
+                height: 10 * 64,
+                music: 'playground',
+                music_loop: true
+            },
+
+            tenant: {
+                x: 130,
+                y: 130
+            },
+
+            base: {
+
+                map: [
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 1, 2, 3, 0, 0, 1, 2, 3, 0,
+                    0, 4, 5, 5, 5, 5, 5, 5, 6, 0,
+                    0, 7, 5, 9, 0, 0, 7, 5, 9, 0,
+                    0, 0, 5, 0, 0, 0, 0, 5, 0, 0,
+                    0, 0, 5, 0, 0, 0, 0, 5, 0, 0,
+                    0, 1, 5, 3, 0, 0, 1, 5, 3, 0,
+                    0, 4, 5, 5, 5, 5, 5, 5, 6, 0,
+                    0, 7, 8, 9, 0, 0, 7, 8, 9, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                ],
+
+                assets: {
+                    0: {
+                        name: 'blank',
+                        abbreviation: 'bk'
+                    },
+                    1: {
+                        name: 'tl',
+                        abbreviation: 'TL'
+                    },
+                    2: {
+                        name: 't',
+                        abbreviation: 'T',
+                    },
+                    3: {
+                        name: 'tr',
+                        abbreviation: 'TR'
+                    },
+                    4: {
+                        name: 'ml',
+                        abbreviation: 'ML'
+                    },
+                    5: {
+                        name: 'm',
+                        abbreviation: 'M'
+                    },
+                    6: {
+                        name: 'mr',
+                        abbreviation: 'MR'
+                    },
+                    7: {
+                        name: 'bl',
+                        abbreviation: 'BL'
+                    },
+                    8: {
+                        name: 'b',
+                        abbreviation: 'B'
+                    },
+                    9: {
+                        name: 'br',
+                        abbreviation: 'BR'
+                    }
+                }
+
+            },
+            collision: {
+                map: [
+                    1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                    1, 0, 0, 0, 1, 1, 0, 0, 0, 1,
+                    1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+                    1, 0, 0, 0, 1, 1, 0, 0, 0, 1,
+                    1, 1, 0, 1, 1, 1, 1, 0, 1, 1,
+                    1, 1, 0, 1, 1, 1, 1, 0, 1, 1,
+                    1, 0, 0, 0, 1, 1, 0, 0, 0, 1,
+                    1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+                    1, 0, 0, 0, 1, 1, 0, 0, 0, 1,
+                    1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                ],
+
+                assets: {
+                    0: {
+                        name: 'passage',
+                        abbreviation: 'P'
+                    },
+                    1: {
+                        name: 'collision',
+                        abbreviation: 'C'
+                    }
+                }
+            }
+        }
+    }
+
+    // Set tiles to be displayed
+    setWorldBaseTiles(objWorld, intLevel);
+
+    // Set tiles to be parsed in the collision world
+    setWorldBaseTilesCollision(objWorld, intLevel);
+
+    // With the visual tiles setted up, place
+    // Tenant within the visual world
     setElement(cntWorldBase, 'img', 'imgWorldTenant', 'image/png', 'img/char/tenant/world/d.png', 'image', false, true);
-    setElement(document.body, 'div', 'cntWorldImgProtector', '<NOTYPE>', '<NOVALUE>', '<NOCLASS>', false, false);
+    
+    // Give Tenant coordinates starter
+    imgWorldTenant.style.transform = 'translateX(' + objWorld[intLevel].tenant.x + 'px) translateY(' + objWorld[intLevel].tenant.y + 'px)';
 
-    imgWorldTenant.style.transform = 'translateX(0px) translateY(0px)';
+    // Create a fade in effect
     setFade(true);
-    audPlayground.play();
 
-   
+    // Create an HTML audio element and play it
+    setElement(document.body, 'audio', 'audBackground', 'audio/ogg', 'aud/' + objWorld[intLevel].info.music + '.ogg', '<NOCLASS>', false, true);
+    audBackground.loop = objWorld[intLevel].info.music_loop;
+    audBackground.play();
+
+    // On each milisecond, check for updates
     setInterval(function () { setWorldUpdate() }, 1);
 }
 
-function setWorldBaseTiles() {
-    setElement(document.body, 'div', 'cntWorldBase', '<NOTYPE>', '<NOVALUE>', 'tile', false, false);
-
-    setElement(cntWorldBase, 'img', 'imgWorldBaseTL', 'image/png', 'img/bg/world/playground/base/tl.png', '<NOCLASS>', false, true);
-    setElement(cntWorldBase, 'img', 'imgWorldBaseT', 'image/png', 'img/bg/world/playground/base/t.png', '<NOCLASS>', false, true);
-    setElement(cntWorldBase, 'img', 'imgWorldBaseTR', 'image/png', 'img/bg/world/playground/base/tr.png', '<NOCLASS>', false, true);
-    setElement(cntWorldBase, 'img', 'imgWorldBaseML', 'image/png', 'img/bg/world/playground/base/ml.png', '<NOCLASS>', false, true);
-    setElement(cntWorldBase, 'img', 'imgWorldBaseM', 'image/png', 'img/bg/world/playground/base/m.png', '<NOCLASS>', false, true);
-    setElement(cntWorldBase, 'img', 'imgWorldBaseMR', 'image/png', 'img/bg/world/playground/base/mr.png', '<NOCLASS>', false, true);
-    setElement(cntWorldBase, 'img', 'imgWorldBaseBL', 'image/png', 'img/bg/world/playground/base/bl.png', '<NOCLASS>', false, true);
-    setElement(cntWorldBase, 'img', 'imgWorldBaseB', 'image/png', 'img/bg/world/playground/base/b.png', '<NOCLASS>', false, true);
-    setElement(cntWorldBase, 'img', 'imgWorldBaseBR', 'image/png', 'img/bg/world/playground/base/br.png', '<NOCLASS>', false, true);
-}
-function setWorldBaseTilesCollision() {
-    setElement(document.body, 'div', 'cntWorldBaseCollision', '<NOTYPE>', '<NOVALUE>', 'tile', false, false);
-    cntWorldBaseCollision.style.transform = 'translateX(0px) translateY(-256px)';
-
-
-
-    setElement(cntWorldBaseCollision, 'img', 'imgWBC000C', 'image/png', 'img/bg/world/playground/collision/collision.png', '<NOCLASS>', false, true);
-    setElement(cntWorldBaseCollision, 'img', 'imgWBC001C', 'image/png', 'img/bg/world/playground/collision/collision.png', '<NOCLASS>', false, true);
-    setElement(cntWorldBaseCollision, 'img', 'imgWBC002C', 'image/png', 'img/bg/world/playground/collision/collision.png', '<NOCLASS>', false, true);
-    setElement(cntWorldBaseCollision, 'img', 'imgWBC003C', 'image/png', 'img/bg/world/playground/collision/collision.png', '<NOCLASS>', false, true);
-    setElement(cntWorldBaseCollision, 'img', 'imgWBC004C', 'image/png', 'img/bg/world/playground/collision/collision.png', '<NOCLASS>', false, true);
-    setElement(cntWorldBaseCollision, 'img', 'imgWBC005C', 'image/png', 'img/bg/world/playground/collision/collision.png', '<NOCLASS>', false, true);
-    setElement(cntWorldBaseCollision, 'img', 'imgWBC006P', 'image/png', 'img/bg/world/playground/collision/passage.png', '<NOCLASS>', false, true);
-    setElement(cntWorldBaseCollision, 'img', 'imgWBC007P', 'image/png', 'img/bg/world/playground/collision/passage.png', '<NOCLASS>', false, true);
-    setElement(cntWorldBaseCollision, 'img', 'imgWBC008P', 'image/png', 'img/bg/world/playground/collision/passage.png', '<NOCLASS>', false, true);
-    setElement(cntWorldBaseCollision, 'img', 'imgWBC009C', 'image/png', 'img/bg/world/playground/collision/collision.png', '<NOCLASS>', false, true);
-    setElement(cntWorldBaseCollision, 'img', 'imgWBC010C', 'image/png', 'img/bg/world/playground/collision/collision.png', '<NOCLASS>', false, true);
-    setElement(cntWorldBaseCollision, 'img', 'imgWBC011P', 'image/png', 'img/bg/world/playground/collision/passage.png', '<NOCLASS>', false, true);
-    setElement(cntWorldBaseCollision, 'img', 'imgWBC012P', 'image/png', 'img/bg/world/playground/collision/passage.png', '<NOCLASS>', false, true);
-    setElement(cntWorldBaseCollision, 'img', 'imgWBC013P', 'image/png', 'img/bg/world/playground/collision/passage.png', '<NOCLASS>', false, true);
-    setElement(cntWorldBaseCollision, 'img', 'imgWBC014C', 'image/png', 'img/bg/world/playground/collision/collision.png', '<NOCLASS>', false, true);
-    setElement(cntWorldBaseCollision, 'img', 'imgWBC015C', 'image/png', 'img/bg/world/playground/collision/collision.png', '<NOCLASS>', false, true);
-    setElement(cntWorldBaseCollision, 'img', 'imgWBC016P', 'image/png', 'img/bg/world/playground/collision/passage.png', '<NOCLASS>', false, true);
-    setElement(cntWorldBaseCollision, 'img', 'imgWBC017P', 'image/png', 'img/bg/world/playground/collision/passage.png', '<NOCLASS>', false, true);
-    setElement(cntWorldBaseCollision, 'img', 'imgWBC018P', 'image/png', 'img/bg/world/playground/collision/passage.png', '<NOCLASS>', false, true);
-    setElement(cntWorldBaseCollision, 'img', 'imgWBC019C', 'image/png', 'img/bg/world/playground/collision/collision.png', '<NOCLASS>', false, true);
-    setElement(cntWorldBaseCollision, 'img', 'imgWBC020C', 'image/png', 'img/bg/world/playground/collision/collision.png', '<NOCLASS>', false, true);
-    setElement(cntWorldBaseCollision, 'img', 'imgWBC021C', 'image/png', 'img/bg/world/playground/collision/collision.png', '<NOCLASS>', false, true);
-    setElement(cntWorldBaseCollision, 'img', 'imgWBC022C', 'image/png', 'img/bg/world/playground/collision/collision.png', '<NOCLASS>', false, true);
-    setElement(cntWorldBaseCollision, 'img', 'imgWBC023C', 'image/png', 'img/bg/world/playground/collision/collision.png', '<NOCLASS>', false, true);
-    setElement(cntWorldBaseCollision, 'img', 'imgWBC024C', 'image/png', 'img/bg/world/playground/collision/collision.png', '<NOCLASS>', false, true);
-}
-
 function setWorldUpdate() {
+    // Grab X and Y coordinates from Tenant's CSS transform style
     let arrTenantMovement = [parseInt(imgWorldTenant.style.transform.split(' ')[0].match(/[-]?\d+/)),
-                             parseInt(imgWorldTenant.style.transform.split(' ')[1].match(/[-]?\d+/))];
+        parseInt(imgWorldTenant.style.transform.split(' ')[1].match(/[-]?\d+/))];
+
+    // Set directional movements to be passable.
+    // In order, they are up, down, left, and right respectively.
     let arrPassableMovements = [true, true, true, true]
 
+    // Check collision from Tenant
     checkCollision(arrPassableMovements);
+
+    // Set visual and coordinal movements for Tenant
     setCharImg(arrTenantMovement, arrPassableMovements);
 
+    // Update Tenant's CSS transform style to which direction it will be heading
     imgWorldTenant.style.transform = 'translateX(' + arrTenantMovement[0] + 'px) translateY(' + arrTenantMovement[1] + 'px)';
+}
+
+function setTiles(objWorld, intLevel, blnIsBase) {
+    // If we are parsing for the visual world, then do so.
+    // Else, parse it for the collision world.
+
+    if (blnIsBase) {
+        // For each digits in base map
+        for (intIndex = 0; intIndex < objWorld[intLevel].base.map.length; intIndex++) {
+            // Get the current index as string
+            let strNumber = intIndex.toString();
+            // Get the digit from the base map
+            let intDigit = objWorld[intLevel].base.map[intIndex];
+
+            // If there is only one digit, add two
+            // zeroes before it.
+            // Else if two digits, one zero.
+            if (strNumber.length == 1) {
+                strNumber = '00' + strNumber;
+            } else if (strNumber.length == 2) {
+                strNumber = '0' + strNumber;
+            }
+
+            // Create a tile for the visual world
+            setElement(
+                cntWorldBase,
+                'img',
+                'imgWB' + strNumber + objWorld[intLevel].base.assets[intDigit].abbreviation,
+                'image/png',
+                'img/bg/world/playground/base/' + objWorld[intLevel].base.assets[intDigit].name + '.png',
+                '<NOCLASS>',
+                false,
+                true
+            )
+        }
+    }
+    else {
+        // For each digits in collision map
+        for (intIndex = 0; intIndex < objWorld[intLevel].collision.map.length; intIndex++) {
+            // Get the current index as string
+            let strNumber = intIndex.toString();
+            // Get the digit from collision map
+            let intDigit = objWorld[intLevel].collision.map[intIndex];
+
+            // If there is only one digit, add two
+            // zeroes before it.
+            // Else if two digits, one zero.
+            if (strNumber.length == 1) {
+                strNumber = '00' + strNumber;
+            } else if (strNumber.length == 2) {
+                strNumber = '0' + strNumber;
+            }
+
+            // Create a tile for the collision world
+            setElement(
+                cntWorldBaseCollision,
+                'img',
+                'imgWBC' + strNumber + objWorld[intLevel].collision.assets[intDigit].abbreviation,
+                'image/png',
+                'img/bg/world/playground/collision/' + objWorld[intLevel].collision.assets[intDigit].name + '.png',
+                '<NOCLASS>',
+                false,
+                true
+            )
+        }
+    }
+}
+
+function setWorldBaseTiles(objWorld, intLevel) {
+    // Create the visual world
+    setElement(document.body, 'div', 'cntWorldBase', '<NOTYPE>', '<NOVALUE>', 'tile', false, false);
+
+    // Adjust its width based on the given level width from objWorld
+    cntWorldBase.style.width = objWorld[intLevel].info.width + 'px';
+
+    // Adjust its height based on the given level height from objWorld
+    cntWorldBase.style.height = objWorld[intLevel].info.height + 'px';
+
+    // Parse tiles for the visual world
+    setTiles(objWorld, intLevel, true);
+}
+function setWorldBaseTilesCollision(objWorld, intLevel) {
+    // Create the collision world
+    setElement(document.body, 'div', 'cntWorldBaseCollision', '<NOTYPE>', '<NOVALUE>', 'tile', false, false);
+
+    // Adjust its width and height based on the given level width and height from objWorld
+    cntWorldBaseCollision.style.width = objWorld[intLevel].info.width + 'px';
+    cntWorldBaseCollision.style.height = objWorld[intLevel].info.height + 'px';
+
+    // Offset the collision world to perfectly align with the visual world on the given level height from objWorld
+    cntWorldBaseCollision.style.transform = 'translateX(0px) translateY(-' + objWorld[intLevel].info.height + 'px)';
+
+    // Parse tiles for the collision world
+    setTiles(objWorld, intLevel, false);
 }
 
 function setCharImg(arrTenantMovement, arrPassableMovements) {
@@ -119,51 +294,68 @@ function setCharImg(arrTenantMovement, arrPassableMovements) {
 }
 
 function checkCollision(arrPassableMovements) {
-    let childrens = cntWorldBaseCollision.children;
-    let tenantDOM = imgWorldTenant.getBoundingClientRect();
+    /*
+     * Offsets for domTenant is used to accomidate the
+     * picture boundary. In other words, since all world-related
+     * assets are 64x64 and Tenant is visually shown smaller than that,
+     * we use offsets to not evaluate the extra spaces that Tenant
+     * has.
+     */
+
+    /*
+     * For the sake of simplicity, INT_IMAGE_SIZE is the sum
+     * of two comparing objects (Tenant and the collision tile) for
+     * both width and height.
+     */
+
+    const INT_IMAGE_OFFSET = 16;
+    const INT_IMAGE_SIZE = 128;
+    const INT_STEPS = 3;
+    let chdTiles = cntWorldBaseCollision.children;
+    let domTenant = imgWorldTenant.getBoundingClientRect();
 
     // For number of tiles set in the collision world
-    for (let i = 0; i < childrens.length; i++) {
+    for (let intIndex = 0; intIndex < chdTiles.length; intIndex++) {
 
         // Get the HTML element of that tile 
-        let childrenElement = document.getElementById(childrens[i].id);
+        let elmTile = document.getElementById(chdTiles[intIndex].id);
 
         // Get the JavaScript DOM object of that tile
-        let childrenDOM = childrenElement.getBoundingClientRect();
+        let domTile = elmTile.getBoundingClientRect();
 
         // If that tile's last fixed character ends with C
-        if (childrens[i].id.substring(9) == 'C') {
+        if (chdTiles[intIndex].id.substring(9) == 'C') {
 
-            /*
-             * Offsets for tenantDOM is used to accomidate the actual
-             * picture boundary. In other words, since all world-related
-             * assets are 64x64 and Tenant is visually shown smaller than that,
-             * we use offsets to not evaluate the extra spaces that Tenant
-             * has.
-             */
+            // Get the diffence in coordinates from these two object.
+            let intXCheck = domTenant.x - domTile.x;
+            let intYCheck = domTenant.y - domTile.y;
 
-            if (Math.abs(tenantDOM.x - childrenDOM.x) * 2 < (tenantDOM.width + childrenDOM.width) &&
-                Math.abs(tenantDOM.y - childrenDOM.y) * 2 < (tenantDOM.height + childrenDOM.height)) {
+            // In general, check if the difference in X and Y coordinates is less then
+            // the surrounding collision tile. Subtract or add based on which direction
+            // it will affect Tenant for the ability to move.
 
-                // Checks for up. Else, down.
-                if (tenantDOM.bottom - childrenDOM.bottom > 0 &&
-                    tenantDOM.top - childrenDOM.top > 0) {
-                    arrPassableMovements[0] = false;
+            // Check if going up
+            if (Math.abs(intXCheck) * 2 < INT_IMAGE_SIZE - INT_IMAGE_OFFSET &&
+                Math.abs(intYCheck - INT_STEPS) * 2 < INT_IMAGE_SIZE - INT_IMAGE_OFFSET) {
+                arrPassableMovements[0] = false;
+            }
 
-                } else if (tenantDOM.bottom - childrenDOM.bottom < 0 &&
-                    tenantDOM.top - childrenDOM.top < 0) {
-                    arrPassableMovements[1] = false;
-                }
+            // Check if going down
+            if (Math.abs(intXCheck) * 2 < INT_IMAGE_SIZE - INT_IMAGE_OFFSET &&
+                Math.abs(intYCheck + INT_STEPS) * 2 < INT_IMAGE_SIZE - INT_IMAGE_OFFSET) {
+                arrPassableMovements[1] = false;
+            }
 
-                // Checks for left. Else, right.
-                if (tenantDOM.left - childrenDOM.left > 0 &&
-                    tenantDOM.right - childrenDOM.right > 0) {
-                    arrPassableMovements[2] = false;
-                } else if (tenantDOM.left - childrenDOM.left < 0 &&
-                    tenantDOM.right - childrenDOM.right < 0) {
-                    arrPassableMovements[3] = false;
-                }
+            // Check if going left
+            if (Math.abs(intXCheck - INT_STEPS) * 2 < INT_IMAGE_SIZE - INT_IMAGE_OFFSET &&
+                Math.abs(intYCheck) * 2 < INT_IMAGE_SIZE - INT_IMAGE_OFFSET) {
+                arrPassableMovements[2] = false;
+            }
 
+            // Check if going right
+            if (Math.abs(intXCheck + INT_STEPS) * 2 < INT_IMAGE_SIZE - INT_IMAGE_OFFSET &&
+                Math.abs(intYCheck) * 2 < INT_IMAGE_SIZE - INT_IMAGE_OFFSET) {
+                arrPassableMovements[3] = false;
             }
         }
     }

@@ -6,16 +6,12 @@
 }
 
 #cntWorldBase {
-    width: 192px;
-    height: 192px;
-    top: 50vh;
+    top: 25vh;
     z-index:1;
 }
 
 #cntWorldBaseCollision {
-    width: 320px;
-    height: 320px;
-    top: 50vh;
+    top: 25vh;
 }
 
 .tile {
