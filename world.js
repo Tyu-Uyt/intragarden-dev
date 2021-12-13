@@ -14,7 +14,7 @@
                 height: 11 * 64,
                 music: 'playground',
                 music_loop: true,
-                freeCamera: true
+                freeCamera: false
             },
 
             tenant: {

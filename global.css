@@ -79,7 +79,6 @@ img {
     position: absolute;
     perspective: 1000px;
     transform-style: preserve-3d;
-    transition: transform 0.8s;
     transform: translateY(0px) translateX(0px);
     z-index: 1;
 }

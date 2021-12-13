@@ -1,60 +1,10 @@
-#cntBattleTopPattern {
-	background: url('img/bg/battle/up.gif');
-	transform: rotateX(100deg);
+#cntGround {
+    position: absolute;
+    width: 100vw;
+    height: 13vh;
+    top: 87vh;
 }
 
-#cntBattleBottomPattern
-{
-	background: url('img/bg/battle/down.gif');
-	transform: rotateX(80deg);
-}
-
-#imgBattleFoe
-{
-	transform: translateY(0px) translateX(0px);
-	left: 50%;
-	top: 50%;
-	width: 104px;
-	height: 193px;
-	margin-left: -52px;
-	margin-top: -96.5px;
-}
-
-#imgBattleTenant{
-	transform: translateY(0px) translateX(0px);
-	left: 50%;
-	top: 85%;
-	width: 197px;
-	height: 407px;
-	margin-left: -98.5px;
-	margin-top: -203.5px;
-	z-index: 2;
-}
-
-#imgBattleAdvocate {
-	transform: translateY(0px) translateX(0px);
-	width: 110px;
-	height: 154px;
-	left: 60%;
-	top: 93%;
-	margin-left: -55px;
-	margin-top: -77px;
-	z-index: 3;
-}
-
-#cntBattleCommand
-{
-	height: 0;
-	position: absolute;
-	left: 50%;
-	top: 95%;
-	margin-left: calc(-50px * 2);
-	display: flex;
-	flex-flow: column wrap;
-	justify-content: center;
-	z-index: 4;
-}
-
-#cntBattleCommand > img {
-	position: relative;
+#imgUser {
+    width: 8vh;
 }
