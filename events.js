@@ -3,7 +3,7 @@ window.addEventListener('load', function () {
 });
 
 window.addEventListener('beforeunload', function (e) {
-    Cookies.set('yes', 'yes', {sameSite: 'strict'});
+    Cookies.set('yes', 'yes', {sameSite: 'strict', expires: 7 });
 });
 
 document.addEventListener('keydown', (event) => {
