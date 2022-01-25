@@ -1,3 +1,11 @@
+window.addEventListener('load', function () {
+    startMenu();
+});
+
+window.addEventListener('beforeunload', function (e) {
+    Cookies.set('yes', 'yes', {sameSite: 'strict'});
+});
+
 document.addEventListener('keydown', (event) => {
     let name = event.key;
     let code = event.code;

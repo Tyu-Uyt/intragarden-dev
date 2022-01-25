@@ -131,32 +131,7 @@ let arrTexts = [
 // *************************
 
 // *************************
-// ***** For battle.js *****
-// *************************
-// Attacks based on their damage
-const ATTACKS = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
-let arrAttack = ATTACKS[1];
-
-// Health #, Magic #, Mental #, Acceptance %, ID
-let arrP1 = [10, 3, 5, 0.5, 'P1'];
-let arrP2 = [10, 3, 5, 0.5, 'P2'];
-
-// Turns, index
-let arrGeneral = [1];
-
-// AI's decisions: Brawl, Magic, Speech, Guard
-const DECISIONS = [0, 1, 2, 3];
-// *************************
-
-
-// *************************
-// ***** For p2p.js ********
-// *************************
-let p2pConn;
-let p2pPeer = new Peer();
-// *************************
-
-// *************************
 // ***** For keyboard.js ***
 // *************************
 let arrKeys = [];
+

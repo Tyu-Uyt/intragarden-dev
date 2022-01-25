@@ -1,8 +1,4 @@
-﻿window.addEventListener('load', function () {
-    startMenu();
-});
-
-function startMenu() {
+﻿function startMenu() {
     intMode = 0;
     setFade(true);
     setElement(document.body, 'audio', 'audMenu', 'audio/ogg', 'aud/menu.ogg', '<NOCLASS>', false, true, true);
