@@ -5,6 +5,9 @@
     // TEMPORARILY: Set the level to zero
     let intLevel = 0;
 
+
+    Cookies.set('no', 'no', {sameSite: 'strict'});
+
     // Create a world object that has all information
     // necessary to process
     let objWorld = {

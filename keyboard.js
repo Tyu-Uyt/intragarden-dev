@@ -3,7 +3,7 @@ document.addEventListener('keydown', (event) => {
     let code = event.code;
 
     // If the user is in world mode
-    if (intMode == 3) {
+    if (intMode == 3 || intMode == 2) {
         arrKeys.push(event.key);
     }
 
@@ -16,7 +16,7 @@ document.addEventListener('keyup', (event) => {
 
     // If the user is in the world mode
 
-    if (intMode == 3) {
+    if (intMode == 3 || intMode == 2) {
         arrKeys.splice(arrKeys.indexOf(event.key), 1);
     }
 }, false);
