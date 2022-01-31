@@ -25,12 +25,7 @@ let intMode = 0;
 	[4] -> intMaxHunger
 	[5] -> intMaxSocial
 */
-let arrVariables = [100,
-	100,
-	100,
-	100,
-	100,
-	100];
+let objCookies;
 let arrTexts = [
 	['evt_00',
 		'[Primary test event]',

@@ -1,26 +1,3 @@
-/*
-	Rules on code standardization:
-	[1] - 	Each variable must have three character identifier.
-			So far:
-			int	-	Integer
-			ele	-	HTML element
-			arr	-	Array
-			itv	-	Interval
-			tmr	-	Timer
-			dte	-	Date
-			lbl - 	HTML label element
-			cnt -	HTML container element
-			tmp - 	Temporarily
-			btn - 	Button
-	[2]	-	Each function must start with set or get.
-	[3] -	Each string must be encapsuled with single quotes.
-	[4] -	If applicable, then the first function parameter must
-			be the parent, the child's given name, who does the
-			child associate as, and what variables needs to be
-			handled or given.
-	[5]	-	Placing styles in setElement function is prohibited.
-*/
-
 function setStopIntervals(){
 	let totHighestId = setTimeout(";");
 
@@ -38,7 +15,7 @@ function setDeath(){
 	let imgTenant = setElement(document.body, 'img', 'imgTenant', 'image/png', 'img/char/tenant/dying.png', 'image', false, true);
 	setTimeout(function() {imgTenant.remove();}, 1500);
 	setTimeout(function() {
-		let lblDeath = setElement(document.body, 'label', 'lblDeath', '%NOTYPE%', 'Unfortunately, your tenant has deceased.', 'label', true, false);
+		let lblDeath = setElement(document.body, 'label', 'lblDeath', '', 'Unfortunately, your tenant has deceased.', 'label', true, false);
 	}, 4000);
 } // End of setDeath function
 
@@ -53,7 +30,7 @@ function setStatus(arrVariables, arrRequests){
 	//	Is it correct to call the modifier value modifiee?
 	//	For each given status and the desired modifiee
 	let counter = -1;
-	let cntParameter = setElement(document.body, 'div', 'cntParameter', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
+	let cntParameter = setElement(document.body, 'div', 'cntParameter', '', '', 'container', false, false);
 
 	for (let i = 0; i < arrRequests.length - 1; i += 2){
 		let tmpStatus = "";
@@ -107,7 +84,7 @@ function setStatus(arrVariables, arrRequests){
 		// 	Note the `` encapsulement,
 		//	and the explicit .toString() preferrence
 
-		let tmpLabel = setElement(cntParameter, 'label', 'tmpLabel' + counter, '%NOTYPE%', `${tmpStatus} value has ${tmpIndicator} by ${tmpNumber}${tmpExpression}`, 'label', true, false);
+		let tmpLabel = setElement(cntParameter, 'label', 'tmpLabel' + counter, '', `${tmpStatus} value has ${tmpIndicator} by ${tmpNumber}${tmpExpression}`, 'label', true, false);
 
 		if (i == 0) {
 			tmpLabel.style.marginTop = '300px';
@@ -215,8 +192,8 @@ function setTextParse(cntTextbox, stringParameter){
 
 function setEvent(arrVariables, arrTexts, arrRequests, intEventNumber, blnShowParameter){
 	setCanvas(arrVariables, arrTexts, 0, 0, true, false);
-	let cntTextbox = 	setElement(document.body, 'div', 'cntTextbox', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
-	let lblText =		setElement(cntTextbox, 'label', 'lblText', '%NOTYPE%', arrTexts[intEventNumber][1], 'label', true, false);
+	let cntTextbox = 	setElement(document.body, 'div', 'cntTextbox', '', '', 'container', false, false);
+	let lblText =		setElement(cntTextbox, 'label', 'lblText', '', arrTexts[intEventNumber][1], 'label', true, false);
 	let intCounter = 1;
 
 
@@ -376,56 +353,6 @@ function setCanvas(arrVariables, arrTexts, intCode, intCodeSecondary, blnRemoveS
 		case 0: // Do nothing
 			break;
 		case 1: // Draw a canvas
-			switch (intCodeSecondary) {
-				case 0: // Main
-					let cntCommand = 	setElement(document.body, 'div', 'cntCommand', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
-					let cntStatus =		setElement(cntCommand, 'div', 'cntStatus', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
-					let cntButtonsMain = 	setElement(cntCommand, 'div', 'cntButtonsMain', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
-					let imgTenant = 	setElement(document.body, 'img', 'imgTenant', 'image/png', 'img/char/tenant/normal.png', 'image', false, true);
-					let lblEnergy = 	setElement(cntStatus, 'label', 'lblEnergy', '%NOTYPE%', 'Energy: ' + arrVariables[0] + '/' + arrVariables[3], 'label', true, false);
-					let lblHunger = 	setElement(cntStatus, 'label', 'lblHunger', '%NOTYPE%', 'Hunger: ' + arrVariables[1] + '/' + arrVariables[4], 'label', true, false);
-					let	lblSocial =		setElement(cntStatus, 'label', 'lblSocial', '%NOTYPE%', 'Social: ' + arrVariables[2] + '/' + arrVariables[5], 'label', true, false);
-					let btnSleep =		setElement(cntButtonsMain, 'input', 'btnSleep', 'button', 'Sleep', 'button', false, false);
-					let btnEat = 		setElement(cntButtonsMain, 'input', 'btnEat', 'button', 'Eat', 'button', false, false);
-					let btnTalk =		setElement(cntButtonsMain, 'input', 'btnTalk', 'button', 'Talk', 'button', false, false);
-					let btnLeave =		setElement(cntButtonsMain, 'input', 'btnLeave', 'button', 'Leave', 'button', false, false);
-
-					btnLeave.style.marginRight = '0px';
-
-					btnEat.onclick = function() {setButtonFunctionality(arrVariables, arrTexts, [0, -10, 1, 20], 0, true);};
-					btnSleep.onclick = function() {setButtonFunctionality(arrVariables, arrTexts, [0, 20, 1, -10], 1, true);};
-					btnTalk.onclick = function() {setButtonFunctionality(arrVariables, arrTexts, [0, -10, 2, 20], 2, true);};
-					btnLeave.onclick = function() {setButtonFunctionality(arrVariables, arrTexts, [0, -10, 2, 20], 3, false);};
-
-					setTimeout(function() {setBlink();}, 4000);
-					setInterval(function(){getBackgroundUpdate(arrVariables, arrTexts)}, 7500);
-					break;
-				case 1: // Login
-					let cntLogin = 				setElement(document.body, 'div', 'cntLogin', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
-					let imgAdvocateLogin = 			setElement(cntLogin, 'img', 'imgAdvocateLogin', 'image/png', 'img/char/advocate/normal.svg', 'image', false, true);
-					let lblTitleLogin = 				setElement(cntLogin, 'label', 'lblTitle', '%NOTYPE%', 'Welcome', 'label', true, false);
-					let lblParagraphLogin =			setElement(cntLogin, 'label', 'lblParagraphLogin', '%NOTYPE%', 'Provide me your given data card from your last visit:', 'label', true, false);
-					let boxDataLogin =			setElement(cntLogin, 'input', 'boxDataLogin', 'textbox', '', 'textbox', false, false);
-					let cntButtonsLogin =			setElement(cntLogin, 'div', 'cntButtonsLogin', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
-					let btnContinueLogin = 			setElement(cntButtonsLogin, 'input', 'btnContinueLogin', 'button', 'Here it is!', 'button', false, false);
-					let btnBackLogin =				setElement(cntButtonsLogin, 'input', 'btnBackLogin', 'button', 'Huh?', 'button', false, false);
-
-					btnContinueLogin.onclick = function(){getValidation(arrVariables, arrTexts);};
-					btnBackLogin.onclick = function(){
-						setEvent(arrVariables, arrTexts, [], 4, false);};
-					break;
-				default: // Logout
-					let cntPrompt = 	setElement(document.body, 'div', 'cntPrompt', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
-					let imgAdvocateLogout =	setElement(cntPrompt, 'img', 'imgAdvocateLogout', 'image/png', 'img/char/advocate/normal.png', 'image', false, true);
-					let lblTitleLogout = setElement(cntPrompt, 'label', 'lblTitle', '%NOTYPE%', 'Aww, leaving already?', 'label', true, false);
-					let lblParagraphLogout = setElement(cntPrompt, 'label', 'lblParagraphLogout', '%NOTYPE%', 'Before you go, here is our data card. Please don\'t forget about our existance!', 'label', true, false);
-					let boxData = setElement(cntPrompt, 'input', 'boxData', 'textbox', getDataCard(arrVariables), 'textbox', false, false);
-					let cntButtonsLogout = setElement(cntPrompt, 'div', 'cntButtonsLogout', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
-					let btnContinueLogout =	setElement(cntButtonsLogout, 'input', 'btnContinueLogout', 'button', 'See ya!', 'button', false, false);
-					let btnBackLogout = setElement(cntButtonsLogout, 'input', 'btnBackLogout', 'button', 'Hold on', 'button', false, false);
-					btnContinueLogout.onclick = 	function(){location.href = 'https://www.google.com/';};
-					btnBackLogout.onclick = 		function(){setCanvas(arrVariables, arrTexts, 1, 0, true, false)};
-			}
 			break;
 		default: // Update the status display
 			if (blnDeath){setDeath();}
@@ -455,8 +382,8 @@ function getBackgroundUpdate(arrVariables, arrTexts){
 } // End of getBackgroundUpdate function
 
 function setCountdown(intSeconds){
-	let cntParameter = setElement(document.body, 'div', 'cntParameter', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
-	let lblCountdown = setElement(cntParameter, 'label', 'lblCountdown', '%NOTYPE%', 'Starting countdown', 'label', true, false);
+	let cntParameter = setElement(document.body, 'div', 'cntParameter', '', '', 'container', false, false);
+	let lblCountdown = setElement(cntParameter, 'label', 'lblCountdown', '', 'Starting countdown', 'label', true, false);
 	let dteDeadline = new Date();
 
 	dteDeadline.setSeconds(dteDeadline.getSeconds() + intSeconds);

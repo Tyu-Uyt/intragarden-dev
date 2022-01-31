@@ -4,9 +4,8 @@
 
     // TEMPORARILY: Set the level to zero
     let intLevel = 0;
-
-
-    Cookies.set('no', 'no', {sameSite: 'strict'});
+    
+    addCookies('no', 'no');
 
     // Create a world object that has all information
     // necessary to process
@@ -23,7 +22,8 @@
             tenant: {
                 x: 32,
                 y: 32,
-                canMove: true
+                canMove: true,
+                isMoving: false
             },
 
             0: {
@@ -175,12 +175,16 @@
     setFade(true);
 
     // Create an HTML audio element and play it
-    setElement(document.body, 'audio', 'audBackground', 'audio/ogg', 'aud/' + objWorld[intLevel].info.music + '.ogg', '<NOCLASS>', false, true);
+    setElement(document.body, 'audio', 'audBackground', 'audio/ogg', 'aud/' + objWorld[intLevel].info.music + '.ogg', '', false, true);
     audBackground.loop = objWorld[intLevel].info.music_loop;
     //audBackground.play();
 
+    setElement(document.body, 'audio', 'audCaveWalk', 'audio/ogg', 'aud/caveWalk.ogg', '', false, true);
+    audCaveWalk.loop = true;
+    
+
     // On each milisecond, check for updates
-    setInterval(function () { setWorldUpdate(objWorld, intLevel) }, 1);
+    setInterval(function () { setWorldUpdate(objWorld, intLevel), 0});
 }
 
 function setTextParse(cntTextbox, stringParameter) {
@@ -278,9 +282,9 @@ function setTextParse(cntTextbox, stringParameter) {
 } 
 
 function setText(objWorld, intLevel, intMapDigit) {
-    let cntTextbox = setElement(document.body, 'div', 'cntTextbox', '%NOTYPE%', '%NOVALUE%', 'container', false, false);
+    let cntTextbox = setElement(document.body, 'div', 'cntTextbox', '', '', 'container', false, false);
     let arrTexts = objWorld[intLevel][2].assets[intMapDigit].situation;
-    let lblText = setElement(cntTextbox, 'label', 'lblText', '%NOTYPE%', arrTexts[1], 'label', true, false);
+    let lblText = setElement(cntTextbox, 'label', 'lblText', '', arrTexts[1], 'label', true, false);
     let intCounter = 1;
 
 
@@ -364,7 +368,7 @@ function setTiles(objWorld, intLevel, intActionCode, cntDirector) {
             'img' + strNumber + objWorld[intLevel][intActionCode].assets[intDigit].abbreviation,
             'image/png',
             'img/bg/world/playground/' + cntDirector.id.replace('cnt', '').toLowerCase() + '/' + objWorld[intLevel][intActionCode].assets[intDigit].name + '.png',
-            '<NOCLASS>',
+            '',
             false,
             true
         )
@@ -387,7 +391,7 @@ function setWorld(objWorld, intLevel, intActionCode) {
         strWorldName = 'cntEvents';
     }
 
-    cntTemp = setElement(document.body, 'div', strWorldName, '<NOTYPE>', '<NOVALUE>', 'tile', false, false);
+    cntTemp = setElement(document.body, 'div', strWorldName, '', '', 'tile', false, false);
     cntTemp.style.width = objWorld[intLevel].info.width + 'px';
     cntTemp.style.height = objWorld[intLevel].info.height + 'px';
 
@@ -482,7 +486,7 @@ function checkCollision(objWorld, intLevel, arrPassableMovements) {
      * both width and height.
      */
 
-    const INT_IMAGE_OFFSET = 16;
+    const INT_IMAGE_OFFSET = 32;
     const INT_IMAGE_SIZE = 128;
     const INT_STEPS = 3;
     let chdTiles = cntCollision.children;

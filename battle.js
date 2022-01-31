@@ -53,7 +53,7 @@ function startBattle() {
     document.body.style.backgroundImage = objBattle.level[0].background;
 
     // Set a ground base
-    setElement(document.body, 'div', 'cntGround', '<NOTYPE>', '<NOVALUE>', '<NOCLASS>', false, false);
+    setElement(document.body, 'div', 'cntGround', '', '', '', false, false);
     cntGround.style.backgroundImage = objBattle.level[0].ground;
 
     // Set a character
