@@ -15,7 +15,7 @@ function setElement(cntParent, strElement, strID, strType, strValue, strClass, b
 		tmpElement.src = strValue;
 	}
 	else {
-		if (strValue != '') {
+		if (strValue != '' && blnCreateText == false) {
 			// Set an attribute to place the strValue
 			tmpElement.setAttribute('value', strValue);
 		}
@@ -89,6 +89,18 @@ function addCookies(strName, strValue) {
 
 	// Set the key and value to objCookies
 	objCookies[strName] = strValue;
+
+
+	// Do a loop hole to check if the cookie is a number
+	for (let objKey in objCookies) {
+		
+		// If the value in key consists of only digits
+		if (!isNaN(objCookies[objKey])) {
+
+			// Convert the string value to integer
+			objCookies[objKey] = parseInt(objCookies[objKey]);
+		}
+	}
 }
 
 function getPremadeContainer(intSelection) {
@@ -143,6 +155,51 @@ function getPremadeContainer(intSelection) {
 			btnContinueLogout.onclick = function(){location.href = 'https://www.google.com/';};
 			btnBackLogout.onclick = function(){setCanvas(arrVariables, arrTexts, 1, 0, true, false)};
 			break;
+		case 3: // Title
+			setElement(document.body, 'div', 'cntTitle', '', '', '', false, false);
+			setElement(cntTitle, 'label', 'lblTitle', '', 'IntraGarden', 'label', true, false);
+			setElement(cntTitle, 'label', 'lblStart', '', 'Click here to continue', 'label', true, false);
+
+			lblStart.onclick = function() {
+				setElement(cntTitle, 'audio', 'audtitleSelect', 'audio/ogg', 'aud/titleSelect.ogg', '', false, true);
+				audtitleSelect.play();
+				lblTitle.classList.add('labelClicked');
+				lblStart.classList.add('labelClicked');
+
+				totSample = setTimeout(function() {
+					cntTitle.remove();
+				}, 1900);
+			}
+			break;
+		case 4: // Pause
+			setElement(document.body, 'div', 'cntPause', '', '', '', false, false);
+
+			// Status
+			setElement(cntPause, 'div', 'cntStatus', '', '', 'container', false, false);
+
+			// Pause menu options
+			setElement(cntPause, 'div', 'cntPauseMenu', '', '', '', false, false);
+			setElement(cntPauseMenu, 'label', 'lblTitle', '', 'IntraGarden', 'label', true, false);
+			setElement(cntPauseMenu, 'hr', 'hrLine00', '', '', '', false, false);
+			setElement(cntPauseMenu, 'label', 'lblResume', '', 'Resume', 'label', true, false);
+			setElement(cntPauseMenu, 'label', 'lblBattle', '', 'Battle', 'label', true, false);
+			setElement(cntPauseMenu, 'label', 'lblExit', '', 'Exit', 'label', true, false);
+
+			
+
+			lblResume.onclick = function() {
+				cntPause.classList.add('labelResume');
+			}
+
+			lblBattle.onclick = function() {
+				cntPause.classList.add('labelResume');
+			}
+
+			lblExit.onclick = function() {
+				cntPause.classList.add('labelResume');
+			}
+
+			break;
 		default: // First time prompt
 			setElement(document.body, 'div', 'cntFirstTimePopup', '', '', '', false, false);
 			setElement(cntFirstTimePopup, 'label', 'lblHeader', '', 'INFORMATION', 'label', true, false);
@@ -151,5 +208,25 @@ function getPremadeContainer(intSelection) {
 			setElement(cntFirstTimePopup, 'label', 'lblInformation01', '', 'Nevertheless, enjoy the experience!', 'label', true, false);
 			setElement(cntFirstTimePopup, 'input', 'btnOK', 'button', 'OK', 'button', false, false);
 			setElement(document.body, 'audio', 'audFirstClick', 'audio/ogg', 'aud/firstClick.ogg', '', false, true);
+	}
+}
+
+function getCutscene(intSelection, arrAdditionalParameters) {
+	switch (intSelection) {
+		case 0:
+			break;
+		default: // Intro
+			setTimeout(function() {setFade(false);}, arrAdditionalParameters[0] * 1000)
+			setTimeout(function() {setFade(true);
+								setElement(document.body, 'img', 'imgScene', '', 'img/gif/intro.gif', '', false, true);
+								setElement(document.body, 'div', 'cntBackgroundEffect', '', '', '', false, false);
+								setElement(document.body, 'audio', 'audIntro', 'audio/ogg', 'aud/intro2.ogg', '', false, true);
+								audIntro.play();}, arrAdditionalParameters[0] * 1000 + 500);
+			setTimeout(function() {cntBackgroundEffect.style.backgroundImage = "url('img/gif/flashLong.gif')"}, 33000 + 5000);
+			setTimeout(function() {cntBackgroundEffect.style.backgroundImage = ""}, 35000 + 5000);
+			setTimeout(function() {cntBackgroundEffect.style.backgroundImage = "url('img/gif/flashLong.gif')"}, 50000 + 5000);
+			setTimeout(function() {cntBackgroundEffect.style.backgroundImage = ""}, 52000 + 5000);
+			setTimeout(function() {setFade(false);}, arrAdditionalParameters[1] + 5000);
+			setTimeout(function() {startWorld(false); setFade(true);}, arrAdditionalParameters[1] + 6000);
 	}
 }

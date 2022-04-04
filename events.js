@@ -5,31 +5,34 @@ window.addEventListener('load', function () {
 
         // If the location is on the specified domain
         // Else if the location is not localhost
-        if (this.location.hostname == '') {
+        if (this.location.hostname == 'tyu-uyt.github.io') {
             setFade(true);
             getPremadeContainer();
+            setElement(document.body, 'audio', 'audIntro', 'audio/ogg', 'aud/intro.ogg', '', false, true);
 
             btnOK.onclick = function() {    
                 audFirstClick.play();
-    
-                setCookies();
+                setElement(document.body, 'img', 'imgBackgroundEffect', '', "img/gif/flashLong.gif", '', false, true);
 
-                setTimeout(function() {setFade(false);}, 3000)
-                setTimeout(function() {startWorld();}, 3500);
+                setTimeout(function() {cntFirstTimePopup.remove();}, 1000);
+                setTimeout(function() {imgBackgroundEffect.src = "img/gif/blank.gif";}, 2000);
+                let dblIntroDuration = audIntro.duration * 1000;
+                
+                getCutscene(999, [audFirstClick.duration, dblIntroDuration]);
             }
         } else if (this.location.hostname != '') {
             alert('Unrecognized host.');
         } else {
 
             setCookies();
-            startWorld();
+            startWorld(false);
         }
     } else {
         parseCookies();
 
         // TODO: Check if the player would still be alive
         
-        startWorld();
+        startWorld(true);
     }
 
     
@@ -45,11 +48,10 @@ document.addEventListener('keydown', (event) => {
     let name = event.key;
     let code = event.code;
 
-    // If the user is in world mode
+    // If the user is in world or battle mode
     if (intMode == 3 || intMode == 2) {
         arrKeys.push(event.key);
     }
-
 
     // Filter out duplicate keys
     arrKeys = Array.from(new Set(arrKeys));

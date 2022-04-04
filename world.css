@@ -1,20 +1,17 @@
-﻿#cntWorldBackground {
+#cntWorldBackground {
     width: 200vw;
     height: 200vh;
     background-image: url('img/bg/world/playground/bg.png');
     position: absolute;
 }
 
-#cntBase {
-    z-index: 1;
-}
-
-#cntEvents {
-    z-index: 2;
+#cntEvents ~ #cntTitle {
+    backdrop-filter: blur(5px);
+    transform: scaleX(1.2) scaleY(1.2);
 }
 
 #cntCollision, #cntEvents {
-    visibility: visible;
+    visibility: hidden;
 }
 
 .tile {
@@ -26,18 +23,72 @@
     left: 50vw;
 }
 
-#cntWorldImgProtector {
-    position: absolute;
-    top: 0;
-    width: 200vw;
-    height: 200vh;
-}
-
 #imgWorldTenant {
     position: absolute;
     transform: translateX(0px) translateY(0px);
     transition: none;
     user-select: none;
+    z-index: 0;
     top: 50vh;
     left: 50vw;
+}
+
+#cntTitle, #cntPause {
+    color: white;
+    font-weight: bold;
+    -webkit-text-stroke: 0.12vh black;
+    height: 100vh;
+}
+
+#cntTitle > label{
+    display: table;
+    position: relative;
+    font-size: 5vh;
+    top: 35vh;
+}
+
+#cntPause {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    display: flex;
+    flex-flow: column wrap;
+}
+
+#cntTitle > #lblTitle {
+    font-size: 15vh;
+    -webkit-text-stroke: 0.30vh black;
+}
+
+#hrLine00 {
+    width: 25vw;
+    height: 0.5vw;
+    background-color: white;
+}
+
+#cntPauseMenu {
+    flex-flow: column
+}
+
+#cntPauseMenu > #lblTitle {
+    font-size: 10vh;
+    -webkit-text-stroke: 0.30vh black;
+}
+
+#cntPauseMenu > label:not(#lblTitle) {
+    font-size: 8vh;
+    -webkit-text-stroke: 0.30vh black;
+}
+
+.labelClicked {
+    transform-origin: top top;
+    animation-name: title-fade;
+    animation-duration: 2s;
+}
+
+#cntStatus, #cntPauseMenu {
+    position: relative;
+    display: flex;
+    width: 40vw;
+    height: 30vw;
 }

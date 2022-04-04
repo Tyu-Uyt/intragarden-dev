@@ -1,5 +1,5 @@
 #cntFirstTimePopup {
-    position: relative;
+    position: absolute;
     left: 0;
     right: 0;
     margin-top: 25vh;
@@ -17,8 +17,24 @@
     margin-left: 5vh;
 }
 
-
 #btnOK {
     position: relative;
     left: 37vh;
+}
+
+#imgScene {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin-top: 25vh;
+    width: 37vw;
+    z-index: 1;
+}
+
+#cntBackgroundEffect, #imgBackgroundEffect {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
 }
