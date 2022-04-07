@@ -38,7 +38,7 @@ window.addEventListener('load', function () {
     
 });
 
-window.addEventListener('beforeunload', function (e) {
+window.addEventListener('unload', function (e) {
     for (let objKey in objCookies) {
         Cookies.set(objKey, objCookies[objKey], {sameSite: 'strict', expires: 7 });
     }
