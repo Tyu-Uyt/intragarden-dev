@@ -19,6 +19,7 @@ window.addEventListener('load', function () {
                 let dblIntroDuration = audIntro.duration * 1000;
                 
                 getCutscene(999, [audFirstClick.duration, dblIntroDuration]);
+                setCookies();
             }
         } else if (this.location.hostname != '') {
             alert('Unrecognized host.');
