@@ -192,11 +192,11 @@ function getPremadeContainer(intSelection) {
 			}
 
 			lblBattle.onclick = function() {
-				cntPause.classList.add('labelResume');
+				cntPause.classList.add('labelBattle');
 			}
 
 			lblExit.onclick = function() {
-				cntPause.classList.add('labelResume');
+				cntPause.classList.add('labelExit');
 			}
 
 			break;

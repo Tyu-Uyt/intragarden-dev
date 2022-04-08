@@ -81,3 +81,11 @@ img {
     transform: translateY(0px) translateX(0px);
     z-index: 1;
 }
+
+.footer {
+    font-size: 3vh;
+    position: absolute;
+    bottom: 1vh;
+    z-index: 1;
+    left: 1vw;
+}

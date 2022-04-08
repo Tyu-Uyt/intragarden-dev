@@ -2,6 +2,9 @@ function startBattle() {
     // Set to battle mode
     intMode = 2;
 
+    // Describe controls for battle
+    setElement(document.body, 'label', 'lblFooterBattle', '', '[Esc]: Back to world | [Spacebar]: Jump | [←]: Go left | [→]: Go right | [↓]: Crouch', 'footer', true, false); 
+
     // Set necessary values
     objBattle = {
         info: {
@@ -63,7 +66,7 @@ function startBattle() {
     imgUser.style.transform = 'translateX(20.1vw) translateY(64.1066vh)';
 
     // On each milisecond, check for updates
-    setInterval(function () { setBattleUpdate(objBattle) }, 1);
+    itvBattle = setInterval(function () { setBattleUpdate(objBattle) }, 0);
 
     // Create a fade effect
     setFade(true);
@@ -72,53 +75,48 @@ function startBattle() {
 function checkKeys(objBattle, arrUserMovement) {
 
 
-
-    if (arrKeys.includes(' ') && !objBattle.user.isOnAir) {
-        objBattle.user.isOnAir = true;
-        objBattle.user.dblVelocity += 20;
-    }
-
-    if (arrKeys.includes('ArrowLeft')) {
-        objBattle.user.isFacingRight = false;
-
-        arrUserMovement[0] -= 0.5;
-        imgUser.src = objBattle.character.user.left.base;
-    }
-
-    if (arrKeys.includes('ArrowRight')) {
-        objBattle.user.isFacingRight = true;
-
-        arrUserMovement[0] += 0.5;
-        imgUser.src = objBattle.character.user.right.base;
-    }
-
-    if (arrKeys.includes('ArrowDown') && !objBattle.user.isOnAir) {
-        objBattle.user.isCrouching = true;
-
-        if (objBattle.user.isFacingRight) {
-            imgUser.src = objBattle.character.user.crouch.right.base;
-        } else {
-            imgUser.src = objBattle.character.user.crouch.left.base;
+    if (arrKeys.includes('Escape')) {
+        
+        clearInterval(itvBattle);
+        setFade(false);
+        setTimeout(function() {document.body.style.backgroundImage = '';}, 310);
+        setTimeout(function() {setFade(true); startWorld();}, 1000);
+    } else {
+        if (arrKeys.includes(' ') && !objBattle.user.isOnAir) {
+            objBattle.user.isOnAir = true;
+            objBattle.user.dblVelocity += 20;
         }
-    } else if (!arrKeys.includes('ArrowDown') && objBattle.user.isCrouching) {
-        objBattle.user.isCrouching = false;
-        objBattle.user.cameFromCrouching = true;
-
-        if (objBattle.user.isFacingRight) {
-            imgUser.src = objBattle.character.user.right.base;
-        } else {
+    
+        if (arrKeys.includes('ArrowLeft')) {
+            objBattle.user.isFacingRight = false;
+    
+            arrUserMovement[0] -= 0.5;
             imgUser.src = objBattle.character.user.left.base;
         }
-    }
-
-    if ((arrKeys.includes('z') || arrKeys.includes('ArrowUp')) && !objBattle.user.isThrowsCooling) {
-        if (arrKeys.includes('ArrowUp')) {
-            setThrow(objBattle, 0);
-        } else {
+    
+        if (arrKeys.includes('ArrowRight')) {
+            objBattle.user.isFacingRight = true;
+    
+            arrUserMovement[0] += 0.5;
+            imgUser.src = objBattle.character.user.right.base;
+        }
+    
+        if (arrKeys.includes('ArrowDown') && !objBattle.user.isOnAir) {
+            objBattle.user.isCrouching = true;
+    
             if (objBattle.user.isFacingRight) {
-                setThrow(objBattle, 2);
+                imgUser.src = objBattle.character.user.crouch.right.base;
             } else {
-                setThrow(objBattle, 1);
+                imgUser.src = objBattle.character.user.crouch.left.base;
+            }
+        } else if (!arrKeys.includes('ArrowDown') && objBattle.user.isCrouching) {
+            objBattle.user.isCrouching = false;
+            objBattle.user.cameFromCrouching = true;
+    
+            if (objBattle.user.isFacingRight) {
+                imgUser.src = objBattle.character.user.right.base;
+            } else {
+                imgUser.src = objBattle.character.user.left.base;
             }
         }
     }

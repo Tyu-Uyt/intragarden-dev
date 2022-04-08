@@ -34,7 +34,7 @@ window.addEventListener('load', function () {
         // TODO: Check if the player would still be alive
         
         startWorld(true);
-    }
+    } 
 
     
 });

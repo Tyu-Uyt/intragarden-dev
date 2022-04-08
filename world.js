@@ -2,6 +2,9 @@
   // Set to world mode
   intMode = 3;
 
+  // Describe controls for world
+  setElement(document.body, 'label', 'lblFooterWorld', '', '[Esc]: Pause | [z]: Interact | [←]: Go left | [→]: Go right | [↓]: Go down | [↑]: Go up', 'footer', true, false); 
+
   // TEMPORARILY: Set the level to zero
   let intLevel = 0;
 
@@ -155,7 +158,7 @@
   }
 
   // On each milisecond, check for updates
-  setInterval(function () {
+  itvWorld = setInterval(function () {
     setWorldUpdate(objWorld, intLevel), 0;
   });
 }
@@ -184,7 +187,7 @@ function setTextParse(cntTextbox, stringParameter) {
     "#advocate_card_shocked#",
     "#advocate_card_normal#",
   ];
-
+// For each element in arrCodes, if the stringParameter contains a code that is specified in arrCodes, 
   for (let i = 0; i < arrCodes.length; i++) {
     if (stringParameter.indexOf(arrCodes[i]) > -1) {
       stringParameter = stringParameter.slice(arrCodes[i].length);
@@ -352,6 +355,15 @@ function setWorldUpdate(objWorld, intLevel) {
             objWorld.general.viewStatusDelay = false;
           }, 5000);
         }
+      } else if (cntPause.classList.contains("labelBattle")) {
+        clearInterval(itvWorld);
+        setFade(false);
+        setTimeout( function() {startBattle()}, 1000);
+      } else if (cntPause.classList.contains("labelExit")) {
+        intMode = 0;
+        clearInterval(itvWorld);
+        setFade(false);
+        setTimeout( function() {location.href = 'https://www.google.com/';}, 300);
       }
     } else {
       getPremadeContainer(4);

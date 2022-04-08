@@ -1,11 +1,4 @@
-﻿// *************************
-// ***** For General Info **
-// *************************
-const TITLE = "Intragarden"
-const EDITION = "Dev"
-const BRANCH = "Master"
-
-// Modes -
+﻿// Modes -
 //	0: Menu
 //  1: Care
 //	2: Battle
@@ -124,8 +117,6 @@ let arrTexts = [
 		'#tenant_happy#Then hey, thank you very much!']
 ];
 // *************************
-
-
 
 // *************************
 // ***** For keyboard.js ***
