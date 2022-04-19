@@ -20,7 +20,6 @@
       info: {
         width: 11 * 64,
         height: 11 * 64,
-        music: "playground",
         music_loop: true,
         freeCamera: true,
       },
@@ -138,7 +137,7 @@
     "audio",
     "audBackground",
     "audio/ogg",
-    "aud/" + objWorld[intLevel].info.music + ".ogg",
+    "aud/" + objWorld[intLevel] + ".ogg",
     "<NOCLASS>",
     false,
     true
@@ -466,7 +465,7 @@ function setTiles(objWorld, intLevel, intActionCode, cntDirector) {
         "img",
         "img" + strNumber,
         "image/png",
-        "img/bg/world/playground/" +
+        "img/bg/world/" + intLevel +"/" +
           cntDirector.id.replace("cnt", "").toLowerCase() +
           "/" +
           intDigit +
@@ -483,7 +482,7 @@ function setTiles(objWorld, intLevel, intActionCode, cntDirector) {
           strNumber +
           objWorld[intLevel][intActionCode].assets[intDigit].abbreviation,
         "image/png",
-        "img/bg/world/playground/" +
+        "img/bg/world/" + intLevel + "/" +
           cntDirector.id.replace("cnt", "").toLowerCase() +
           "/" +
           objWorld[intLevel][intActionCode].assets[intDigit].name +
