@@ -5,7 +5,7 @@ window.addEventListener('load', function () {
 
         // If the location is on the specified domain
         // Else if the location is not localhost
-        if (this.location.hostname == 'tyu-uyt.github.io') {
+        if (this.location.hostname == 'abanoy.github.io') {
             setFade(true);
             getPremadeContainer();
             setElement(document.body, 'audio', 'audIntro', 'audio/ogg', 'aud/intro.ogg', '', false, true);
