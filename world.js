@@ -104,7 +104,7 @@
             situation: [
               "evt_99",
               "[Walkthrough Test]",
-              "#tenant#You stepped in a walkthrough!",
+              "#tenant#You INT_STEPSped in a walkthrough!",
             ],
             active: true,
             stillGoing: false,
@@ -120,12 +120,14 @@
 
   // With the visual tiles setted up, place
   // Tenant within the visual world
+
+
   setElement(
     document.body,
     "img",
     "imgWorldTenant",
     "image/png",
-    "img/char/tenant/world/d.png",
+    "img/char/tenant/world/0.png",
     "image",
     false,
     true
@@ -362,7 +364,7 @@ function setWorldUpdate(objWorld, intLevel) {
         intMode = 0;
         clearInterval(itvWorld);
         setFade(false);
-        setTimeout( function() {location.href = 'https://www.google.com/';}, 300);
+        setTimeout( function() {location.href = 'https://abanoy.github.io/';}, 300);
       }
     } else {
       getPremadeContainer(4);
@@ -559,24 +561,24 @@ function setCharImg(
     } else {
       if (arrKeys.includes("ArrowUp")) {
         if (arrKeys.includes("ArrowLeft")) {
-          imgWorldTenant.src = "img/char/tenant/world/ul.png";
+          imgWorldTenant.src = "img/char/tenant/world/0.png";
         } else if (arrKeys.includes("ArrowRight")) {
-          imgWorldTenant.src = "img/char/tenant/world/ur.png";
+          imgWorldTenant.src = "img/char/tenant/world/0.png";
         } else {
-          imgWorldTenant.src = "img/char/tenant/world/u.png";
+          imgWorldTenant.src = "img/char/tenant/world/0.png";
         }
       } else if (arrKeys.includes("ArrowDown")) {
         if (arrKeys.includes("ArrowLeft")) {
-          imgWorldTenant.src = "img/char/tenant/world/dl.png";
+          imgWorldTenant.src = "img/char/tenant/world/0.png";
         } else if (arrKeys.includes("ArrowRight")) {
-          imgWorldTenant.src = "img/char/tenant/world/dr.png";
+          imgWorldTenant.src = "img/char/tenant/world/0.png";
         } else {
-          imgWorldTenant.src = "img/char/tenant/world/d.png";
+          imgWorldTenant.src = "img/char/tenant/world/0.png";
         }
       } else if (arrKeys.includes("ArrowLeft")) {
-        imgWorldTenant.src = "img/char/tenant/world/l.png";
+        imgWorldTenant.src = "img/char/tenant/world/0.png";
       } else if (arrKeys.includes("ArrowRight")) {
-        imgWorldTenant.src = "img/char/tenant/world/r.png";
+        imgWorldTenant.src = "img/char/tenant/world/0.png";
       }
 
       // Check if the respective inclusion should have Tenant be moving
@@ -627,9 +629,6 @@ function checkCollision(objWorld, intLevel, arrPassableMovements) {
    * both width and height.
    */
 
-  const INT_IMAGE_OFFSET = 48;
-  const INT_IMAGE_SIZE = 128;
-  const INT_STEPS = 3;
   let chdTiles = cntCollision.children;
   let domTenant = imgWorldTenant.getBoundingClientRect();
 
@@ -647,75 +646,23 @@ function checkCollision(objWorld, intLevel, arrPassableMovements) {
       // Get the JavaScript DOM object of that tile
       let domTile = elmTile.getBoundingClientRect();
 
+      intTenantY = domTenant.y + (domTenant.height / 2);
+
       // Get the diffence in coordinates from these two object.
       let intXCheck = domTenant.x - domTile.x;
       let intYCheck = domTenant.y - domTile.y;
+      let intWidthCheck = domTenant.width + domTile.width;
+      let intHeightCheck = domTenant.height + domTile.height;
 
       // In general, check if the difference in X and Y coordinates is less then
       // the surrounding collision tile. Subtract or add Floord on which direction
       // it will affect Tenant for the ability to move.
 
-      // Check if going up
-      if (
-        Math.abs(intXCheck) * 2 < INT_IMAGE_SIZE - INT_IMAGE_OFFSET &&
-        Math.abs(intYCheck - INT_STEPS) * 2 < INT_IMAGE_SIZE - INT_IMAGE_OFFSET
-      ) {
-        arrPassableMovements[0] = checkTileAssociation(
-          objWorld,
-          domTenant,
-          domTile,
-          intLevel,
-          intIndex,
-          INT_IMAGE_OFFSET
-        );
-      }
 
-      // Check if going down
-      if (
-        Math.abs(intXCheck) * 2 < INT_IMAGE_SIZE - INT_IMAGE_OFFSET &&
-        Math.abs(intYCheck + INT_STEPS) * 2 < INT_IMAGE_SIZE - INT_IMAGE_OFFSET
-      ) {
-        arrPassableMovements[1] = checkTileAssociation(
-          objWorld,
-          domTenant,
-          domTile,
-          intLevel,
-          intIndex,
-          INT_IMAGE_OFFSET
-        );
-      }
+      // Check if the Tenant's left side is touching the tile's right side
+      if
 
-      // Check if going left
-      if (
-        Math.abs(intXCheck - INT_STEPS) * 2 <
-          INT_IMAGE_SIZE - INT_IMAGE_OFFSET &&
-        Math.abs(intYCheck) * 2 < INT_IMAGE_SIZE - INT_IMAGE_OFFSET
-      ) {
-        arrPassableMovements[2] = checkTileAssociation(
-          objWorld,
-          domTenant,
-          domTile,
-          intLevel,
-          intIndex,
-          INT_IMAGE_OFFSET
-        );
-      }
 
-      // Check if going right
-      if (
-        Math.abs(intXCheck + INT_STEPS) * 2 <
-          INT_IMAGE_SIZE - INT_IMAGE_OFFSET &&
-        Math.abs(intYCheck) * 2 < INT_IMAGE_SIZE - INT_IMAGE_OFFSET
-      ) {
-        arrPassableMovements[3] = checkTileAssociation(
-          objWorld,
-          domTenant,
-          domTile,
-          intLevel,
-          intIndex,
-          INT_IMAGE_OFFSET
-        );
-      }
     }
   }
 }
@@ -726,7 +673,6 @@ function checkTileAssociation(
   domTile,
   intLevel,
   intIndex,
-  INT_IMAGE_OFFSET
 ) {
   let intMapDigit = objWorld[intLevel][3].map[intIndex];
   let strEventName = objWorld[intLevel][3].assets[intMapDigit].name;
