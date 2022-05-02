@@ -152,7 +152,7 @@ function getPremadeContainer(intSelection) {
 			setElement(cntButtonsLogout, 'input', 'btnContinueLogout', 'button', 'See ya!', 'button', false, false);
 			setElement(cntButtonsLogout, 'input', 'btnBackLogout', 'button', 'Hold on', 'button', false, false);
 
-			btnContinueLogout.onclick = function(){location.href = 'https://www.abanoy.github.io/';};
+			btnContinueLogout.onclick = function(){location.href = 'https://abanoy.github.io/';};
 			btnBackLogout.onclick = function(){setCanvas(arrVariables, arrTexts, 1, 0, true, false)};
 			break;
 		case 3: // Title

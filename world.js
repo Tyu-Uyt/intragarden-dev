@@ -362,7 +362,7 @@ function setWorldUpdate(objWorld, intLevel) {
         intMode = 0;
         clearInterval(itvWorld);
         setFade(false);
-        setTimeout( function() {location.href = 'https://www.abanoy.github.io/';}, 300);
+        setTimeout( function() {location.href = 'https://abanoy.github.io/';}, 300);
       }
     } else {
       getPremadeContainer(4);
