@@ -660,7 +660,6 @@ function checkCollision(objWorld, intLevel, arrPassableMovements) {
 
 
       // Check if the Tenant's left side is touching the tile's right side
-      if
 
 
     }
