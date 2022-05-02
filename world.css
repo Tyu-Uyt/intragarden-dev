@@ -23,7 +23,7 @@
     left: 50vw;
 }
 
-#imgWorldTenant{
+#imgWorldTenant {
     position: absolute;
     transform: translateX(0px) translateY(0px);
     transition: none;
