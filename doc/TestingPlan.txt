@@ -1,0 +1,14 @@
+Testing plan -
+
+Case 0: Responsiveness
+*	Take the edge of the browser window and move around.
+*	In a small window, use the arrow keys to see if movements still works.
+*	In a small window, see if the small size still has the user see the world.
+*	If all that relatively works, then the case is passed.
+
+Case 1: Cookies
+*	Ensure no cookies are present for tyu-uyt.github.io
+*	With no cookies present, see that the first time popup appears and click OK
+*	Go over the cutscene
+*	After the cutscene, refresh the page
+*	If the browser presents a title screen, and clicking it resumes back to the ability to move, then the case is passed.
