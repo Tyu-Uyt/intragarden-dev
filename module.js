@@ -159,12 +159,14 @@ function getPremadeContainer(intSelection) {
 			setElement(document.body, 'div', 'cntTitle', '', '', '', false, false);
 			setElement(cntTitle, 'label', 'lblTitle', '', 'IntraGarden', 'label', true, false);
 			setElement(cntTitle, 'label', 'lblStart', '', 'Click here to continue', 'label', true, false);
+			setElement(cntTitle, 'label', 'lblWarning', '', 'And no, I am not making a special edition for this. Don\'t beg for it.', 'label', true, false);
 
 			lblStart.onclick = function() {
 				setElement(cntTitle, 'audio', 'audtitleSelect', 'audio/ogg', 'aud/titleSelect.ogg', '', false, true);
 				audtitleSelect.play();
 				lblTitle.classList.add('labelClicked');
 				lblStart.classList.add('labelClicked');
+				lblWarning.classList.add('labelClicked');
 
 				totSample = setTimeout(function() {
 					cntTitle.remove();

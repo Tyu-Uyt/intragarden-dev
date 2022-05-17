@@ -60,6 +60,12 @@
     -webkit-text-stroke: 0.30vh black;
 }
 
+#cntTitle > #lblWarning {
+    font-size: 3vh;
+    margin-top: 30vh;
+    -webkit-text-stroke: 0.1vh black;
+}
+
 #hrLine00 {
     width: 25vw;
     height: 0.5vw;
