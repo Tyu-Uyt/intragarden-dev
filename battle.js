@@ -46,8 +46,11 @@ function startBattle() {
         },
         level: {
             0: {
-                background: 'url("img/bg/battle/playground/bg.png")',
-                ground: 'url("img/bg/battle/playground/base/tl.png")'
+                background: 'url("img/bg/battle/0/bg.png")',
+                upperground: 'url("img/bg/battle/0/base/3.png")',
+                ground: 'url("img/bg/battle/0/base/2.png")',
+                lowerground: 'url("img/bg/battle/0/base/1.png")',
+                fallground: 'url("img/bg/battle/0/base/0.png")',
             }
         }
     }
@@ -56,14 +59,22 @@ function startBattle() {
     document.body.style.backgroundImage = objBattle.level[0].background;
 
     // Set a ground base
+    setElement(document.body, 'div', 'cntUpperGround', '', '', '', false, false);
     setElement(document.body, 'div', 'cntGround', '', '', '', false, false);
+    setElement(document.body, 'div', 'cntLowerGround', '', '', '', false, false);
+    setElement(document.body, 'div', 'cntFallground', '', '', '', false, false);
+    cntUpperGround.style.backgroundImage = objBattle.level[0].upperground;
     cntGround.style.backgroundImage = objBattle.level[0].ground;
+    cntLowerGround.style.backgroundImage = objBattle.level[0].lowerground;
+    cntFallground.style.backgroundImage = objBattle.level[0].fallground;
 
     // Set a character
-    setElement(document.body, 'img', 'imgUser', 'image/png', objBattle.character.user.base, 'image', false, true);
+    setElement(document.body, 'div', 'cntUser', '', '', '', false, false);
+    setElement(cntUser, 'div', 'cntUserBottom', '', '', '', false, false);
+    setElement(cntUser, 'img', 'imgUser', 'image/png', objBattle.character.user.base, 'image', false, true);
 
     // Give the user a coordinate starter
-    imgUser.style.transform = 'translateX(20.1vw) translateY(64.1066vh)';
+    cntUser.style.transform = 'translateX(20.1vw) translateY(64.1066vh)';
 
     // On each milisecond, check for updates
     itvBattle = setInterval(function () { setBattleUpdate(objBattle) }, 0);
@@ -72,7 +83,7 @@ function startBattle() {
     setFade(true);
 }
 
-function checkKeys(objBattle, arrUserMovement) {
+function checkKeys(objBattle, arrUserMovement, arrUserMovementPossibilities) {
 
 
     if (arrKeys.includes('Escape')) {
@@ -87,43 +98,32 @@ function checkKeys(objBattle, arrUserMovement) {
             objBattle.user.dblVelocity += 20;
         }
     
-        if (arrKeys.includes('ArrowLeft')) {
+        if (arrKeys.includes('ArrowLeft') && arrUserMovementPossibilities[0]) {
             objBattle.user.isFacingRight = false;
     
             arrUserMovement[0] -= 0.5;
             imgUser.src = objBattle.character.user.left.base;
         }
     
-        if (arrKeys.includes('ArrowRight')) {
+        if (arrKeys.includes('ArrowRight') && arrUserMovementPossibilities[1]) {
             objBattle.user.isFacingRight = true;
     
             arrUserMovement[0] += 0.5;
             imgUser.src = objBattle.character.user.right.base;
         }
     
-        if (arrKeys.includes('ArrowDown') && !objBattle.user.isOnAir) {
-            objBattle.user.isCrouching = true;
-    
-            if (objBattle.user.isFacingRight) {
-                imgUser.src = objBattle.character.user.crouch.right.base;
-            } else {
-                imgUser.src = objBattle.character.user.crouch.left.base;
-            }
-        } else if (!arrKeys.includes('ArrowDown') && objBattle.user.isCrouching) {
-            objBattle.user.isCrouching = false;
-            objBattle.user.cameFromCrouching = true;
-    
-            if (objBattle.user.isFacingRight) {
-                imgUser.src = objBattle.character.user.right.base;
-            } else {
-                imgUser.src = objBattle.character.user.left.base;
-            }
+        if (arrKeys.includes('ArrowUp') && arrUserMovementPossibilities[2]) {
+            arrUserMovement[1] -= 0.5;
+        }
+
+        if (arrKeys.includes('ArrowDown') && arrUserMovementPossibilities[3]) {
+            arrUserMovement[1] += 0.5;
         }
     }
 }
 
 function setThrow(objBattle, intActionCode) {
-    // Action - Which directio are we creating?
+    // Action - Which direction are we creating?
     // 0 - Upper
     // 1 - Left
     // 2 - Right
@@ -143,6 +143,24 @@ function setThrow(objBattle, intActionCode) {
     setTimeout(function () { objBattle.user.isThrowsCooling = false; }, 500);
 }
 
+function boundaries(objBattle, arrUserMovementPossibilities, domUser, domPlatform) {
+    if (domUser.left - 20 < 0) {
+        arrUserMovementPossibilities[0] = false;
+    }
+
+    if (domUser.right + 20 > window.innerWidth) {
+        arrUserMovementPossibilities[1] = false;
+    }
+
+    if (domUser.top - 10 < domPlatform[0].top) {
+        arrUserMovementPossibilities[2] = false;
+    }
+
+    if (domUser.bottom - 30 > domPlatform[2].top) {
+        arrUserMovementPossibilities[3] = false;
+    }
+}
+
 function isOffscreen(domObject) {
     if (domObject.left >= window.innerWidth ||
         domObject.right <= 0 ||
@@ -157,83 +175,14 @@ function setBattleUpdate(objBattle) {
     const TIME_STEP = 1;
     const ACCELERATION = 1;
 
-    let arrUserMovement = [parseFloat(imgUser.style.transform.split(' ')[0].match(/[-]?\d+\.\d+/)),
-    parseFloat(imgUser.style.transform.split(' ')[1].match(/[-]?\d+\.\d+/))];
-    let domUser = imgUser.getBoundingClientRect();
-    let domGround = cntGround.getBoundingClientRect();
+    let arrUserMovement = [parseFloat(cntUser.style.transform.split(' ')[0].match(/[-]?\d+\.\d+/)),
+    parseFloat(cntUser.style.transform.split(' ')[1].match(/[-]?\d+\.\d+/))];
+    let arrUserMovementPossibilities = [true, true, true, true];
+    let domUser = cntUserBottom.getBoundingClientRect();
+    let domPlatform = [cntUpperGround.getBoundingClientRect(), cntGround.getBoundingClientRect(), cntLowerGround.getBoundingClientRect(), cntFallground.getBoundingClientRect()];
 
-    checkKeys(objBattle, arrUserMovement);
+    boundaries(objBattle, arrUserMovementPossibilities, domUser, domPlatform);
+    checkKeys(objBattle, arrUserMovement, arrUserMovementPossibilities);
 
-    if (objBattle.user.isOnAir) {
-        // Add a counter in air
-        objBattle.user.intTimeInAir += TIME_STEP;
-
-        // Calculate the future falling
-        domUser.y -= 1 * (objBattle.user.dblVelocity + TIME_STEP * ACCELERATION / 2);
-
-        // Based on the future Y, is the future bottom go beyond the ground?
-        if (domUser.bottom > domGround.top) {
-            // Adjust the future Y to even with the ground
-            domUser.y = domGround.top - domUser.height;
-
-            // Clean-up
-            objBattle.user.isOnAir = false;
-            objBattle.user.intTimeInAir = 0;
-            objBattle.user.dblVelocity = 0;
-        } else {
-            // Calculate the new velocity
-            objBattle.user.dblVelocity -= TIME_STEP * ACCELERATION;
-        }
-
-        // Convert Y coordinates to Viewpoint Height
-        let dblUserVH = domUser.y / (window.innerHeight * 0.01);
-
-        // Apply the Viewpoint Height to the movement
-        arrUserMovement[1] += dblUserVH - arrUserMovement[1];
-    } else if (objBattle.user.isCrouching) {
-        if (domUser.bottom < domGround.top) {
-            domUser.y = domGround.top - domUser.height;
-
-            // Convert Y coordinates to Viewpoint Height
-            let dblUserVH = domUser.y / (window.innerHeight * 0.01);
-
-            // Apply the Viewpoint Height to the movement
-            arrUserMovement[1] += dblUserVH - arrUserMovement[1];
-        }
-    } else if (objBattle.user.cameFromCrouching) {
-
-        objBattle.user.cameFromCrouching = false;
-        // TODO Get Gilbert to get back up.
-        domUser.y -= domUser.height - 1
-
-        // Convert Y coordinates to Viewpoint Height
-        let dblUserVH = domUser.y / (window.innerHeight * 0.01);
-
-        // Apply the Viewpoint Height to the movement
-        arrUserMovement[1] += dblUserVH - arrUserMovement[1];
-    }
-
-    if (objBattle.user.arrThrows.length > 0) {
-        for (let intIndex = 0; intIndex < objBattle.user.arrThrows.length; intIndex++) {
-            let strID = objBattle.user.arrThrows[intIndex].id;
-            let strAbbreviation = strID.charAt(strID.length - 1);
-            let domThrowee = objBattle.user.arrThrows[intIndex].getBoundingClientRect();
-
-            if (isOffscreen(domThrowee)) {
-                objBattle.user.arrTrhows.splice(intIndex, 1);
-            } else {
-                switch (strAbbreviation) {
-                    case 'U':
-                        break;
-                    case 'L':
-                        domThrowee.x -= 5;
-                        break;
-                    default:
-
-                }
-            }
-        }
-    }
-
-    imgUser.style.transform = 'translateX(' + arrUserMovement[0] + 'vw) translateY(' + arrUserMovement[1] + 'vh)';
+    cntUser.style.transform = 'translateX(' + arrUserMovement[0] + 'vw) translateY(' + arrUserMovement[1] + 'vh)';
 }

@@ -294,14 +294,44 @@ img {
 }
 /***********************************************************/
 /************************* Battle **************************/
-#cntGround {
+#cntGround, #cntFallground, #cntUpperGround, #cntLowerGround {
     position: absolute;
     width: 100vw;
     height: 13vh;
     top: 87vh;
+    background-repeat: repeat-x;
+}
+
+#cntUpperGround {
+    top: 67.6vh;
+}
+
+#cntGround {
+    top: 74vh;
+    background-repeat: repeat;
+}
+
+#cntFallground {
+    top: 93.5vh;
+    background-repeat: repeat;
 }
 
 #imgUser {
     width: 8vh;
+}
+
+#cntUser {
+    position: absolute;
+    width: 8vh;
+    height: 23vh;
+    background-color: red;
+}
+
+#cntUserBottom {
+    position: absolute;
+    width: 8vh;
+    height: 1vh;
+    bottom: 0;
+    background-color: blue;
 }
 /***********************************************************/
