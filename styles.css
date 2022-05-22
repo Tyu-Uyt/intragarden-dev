@@ -294,7 +294,7 @@ img {
 }
 /***********************************************************/
 /************************* Battle **************************/
-#cntGround, #cntFallground, #cntUpperGround, #cntLowerGround {
+#cntPlatform, #cntGround, #cntFallground, #cntUpperGround, #cntLowerGround {
     position: absolute;
     width: 100vw;
     height: 13vh;
@@ -302,22 +302,34 @@ img {
     background-repeat: repeat-x;
 }
 
+#cntPlatform {
+    top: 16vh;
+}
+
 #cntUpperGround {
-    top: 67.6vh;
+    top: 60vh;
+    height: 6.4vh;
 }
 
 #cntGround {
-    top: 74vh;
+    top: 66.4vh;
     background-repeat: repeat;
 }
 
+#cntLowerGround {
+    top: 72.8vh;
+    height: 6.5vh;
+}
+
 #cntFallground {
-    top: 93.5vh;
+    top: 79.3vh;
+    height: 100vh;
     background-repeat: repeat;
 }
 
 #imgUser {
     width: 8vh;
+    height: 23vh;
 }
 
 #cntUser {
@@ -325,6 +337,14 @@ img {
     width: 8vh;
     height: 23vh;
     background-color: red;
+}
+
+#cntUserFight {
+    position: absolute;
+    width: 8vh;
+    top: 5vh;
+    height: 3vh;
+    background-color: green;
 }
 
 #cntUserBottom {

@@ -9,6 +9,22 @@ function startBattle() {
     objBattle = {
         info: {
             isCutscene: false,
+            combinations: [['z'],
+                           ['z', 'z'],
+                           ['z', 'z', 'z'],
+                           ['z', 'x'],
+                           ['z', 'x', 'z'],
+                           ['x'],
+                           ['x', 'x'],
+                           ['x', 'x', 'x'],
+                           ['x', 'z'],
+                           ['x', 'z', 'x'],
+                        ],
+            combinator: [],
+            timers: {
+                combinator: null,
+                cooldown: null
+            }
         },
         user: {
             isAlive: true,
@@ -29,10 +45,14 @@ function startBattle() {
             user: {
                 base: 'img/char/gilbert/battle/normal.png',
                 left: {
-                    base: 'img/char/gilbert/battle/left/normal.png'
+                    base: 'img/char/gilbert/battle/left/normal.png',
+                    frames: ['img/char/gilbert/battle/left/basic0.png',
+                             'img/char/gilbert/battle/left/basic1.png',]
                 },
                 right: {
-                    base: 'img/char/gilbert/battle/right/normal.png'
+                    base: 'img/char/gilbert/battle/right/normal.png',
+                    frames: ['img/char/gilbert/battle/right/basic0.png',
+                             'img/char/gilbert/battle/right/basic1.png',]
                 },
                 crouch: {
                     left: {
@@ -59,10 +79,11 @@ function startBattle() {
     document.body.style.backgroundImage = objBattle.level[0].background;
 
     // Set a ground base
-    setElement(document.body, 'div', 'cntUpperGround', '', '', '', false, false);
-    setElement(document.body, 'div', 'cntGround', '', '', '', false, false);
-    setElement(document.body, 'div', 'cntLowerGround', '', '', '', false, false);
-    setElement(document.body, 'div', 'cntFallground', '', '', '', false, false);
+    setElement(document.body, 'div', 'cntPlatform', '', '', '', false, false);
+    setElement(cntPlatform, 'div', 'cntUpperGround', '', '', '', false, false);
+    setElement(cntPlatform, 'div', 'cntGround', '', '', '', false, false);
+    setElement(cntPlatform, 'div', 'cntLowerGround', '', '', '', false, false);
+    setElement(cntPlatform, 'div', 'cntFallground', '', '', '', false, false);
     cntUpperGround.style.backgroundImage = objBattle.level[0].upperground;
     cntGround.style.backgroundImage = objBattle.level[0].ground;
     cntLowerGround.style.backgroundImage = objBattle.level[0].lowerground;
@@ -70,6 +91,7 @@ function startBattle() {
 
     // Set a character
     setElement(document.body, 'div', 'cntUser', '', '', '', false, false);
+    setElement(cntUser, 'div', 'cntUserFight', '', '', '', false, false);
     setElement(cntUser, 'div', 'cntUserBottom', '', '', '', false, false);
     setElement(cntUser, 'img', 'imgUser', 'image/png', objBattle.character.user.base, 'image', false, true);
 
@@ -84,8 +106,6 @@ function startBattle() {
 }
 
 function checkKeys(objBattle, arrUserMovement, arrUserMovementPossibilities) {
-
-
     if (arrKeys.includes('Escape')) {
         
         clearInterval(itvBattle);
@@ -93,11 +113,6 @@ function checkKeys(objBattle, arrUserMovement, arrUserMovementPossibilities) {
         setTimeout(function() {document.body.style.backgroundImage = '';}, 310);
         setTimeout(function() {setFade(true); startWorld();}, 1000);
     } else {
-        if (arrKeys.includes(' ') && !objBattle.user.isOnAir) {
-            objBattle.user.isOnAir = true;
-            objBattle.user.dblVelocity += 20;
-        }
-    
         if (arrKeys.includes('ArrowLeft') && arrUserMovementPossibilities[0]) {
             objBattle.user.isFacingRight = false;
     
@@ -119,36 +134,60 @@ function checkKeys(objBattle, arrUserMovement, arrUserMovementPossibilities) {
         if (arrKeys.includes('ArrowDown') && arrUserMovementPossibilities[3]) {
             arrUserMovement[1] += 0.5;
         }
+
+        checkCombinator('z');
+        checkCombinator('x');
     }
 }
 
-function setThrow(objBattle, intActionCode) {
-    // Action - Which direction are we creating?
-    // 0 - Upper
-    // 1 - Left
-    // 2 - Right
+function checkCombinator(strLetter) {
+    if (arrKeys.includes(strLetter) && objBattle.info.timers.cooldown == null) {
+        if (objBattle.info.timers.combinator != null) {
+            clearTimeout(objBattle.info.timers.combinator);
+        }
 
-    let strAbbreviation = '';
+        objBattle.info.combinator.push(strLetter);
+        objBattle.info.timers.cooldown = setTimeout(function() {
+            if (arrKeys.includes(strLetter)) {
+                objBattle.info.timers.cooldown = setTimeout(arguments.callee, 100);
+            } else {
+                objBattle.info.timers.cooldown = null;
+            }},100);
+        objBattle.info.timers.combinator = setTimeout(function() {
+            alert(objBattle.info.combinator);
+            objBattle.info.combinator = [];}, 1000);
+        
+    }
+}
 
-    if (intActionCode == 0) {
-        strAbbreviation = 'U';
-    } else if (intActionCode == 1) {
-        strAbbreviation = 'L';
-    } else {
-        strAbbreviation = 'R';
+function arrayEquals(a, b) {
+    return Array.isArray(a) &&
+        Array.isArray(b) &&
+        a.length === b.length &&
+        a.every((val, index) => val === b[index]);
+}
+
+function setCombinations (arrCombinator, arrCombinations) {
+    blnCanPass = false;
+
+    for (let i = 0; i < arrCombinations.length; i++) {
+        if (arrayEquals(arrCombinator, arrCombinations[i])) {
+            blnCanPass = true;
+            break;
+        }
     }
 
-    objBattle.user.arrThrows.push(setElement(imgUser, 'img', objBattle.user.arrThrows.length + strAbbreviation, 'image/png', '<IMAGE>', 'image', false, true));
-    objBattle.user.isThrowsCooling = true;
-    setTimeout(function () { objBattle.user.isThrowsCooling = false; }, 500);
+    if (blnCanPass) {
+
+    }
 }
 
 function boundaries(objBattle, arrUserMovementPossibilities, domUser, domPlatform) {
-    if (domUser.left - 20 < 0) {
+    if (domUser.left - 10 < 0) {
         arrUserMovementPossibilities[0] = false;
     }
 
-    if (domUser.right + 20 > window.innerWidth) {
+    if (domUser.right + 10 > window.innerWidth) {
         arrUserMovementPossibilities[1] = false;
     }
 
@@ -156,24 +195,12 @@ function boundaries(objBattle, arrUserMovementPossibilities, domUser, domPlatfor
         arrUserMovementPossibilities[2] = false;
     }
 
-    if (domUser.bottom - 30 > domPlatform[2].top) {
+    if (domUser.bottom + 10 > domPlatform[2].bottom) {
         arrUserMovementPossibilities[3] = false;
     }
 }
 
-function isOffscreen(domObject) {
-    if (domObject.left >= window.innerWidth ||
-        domObject.right <= 0 ||
-        domObject.bottom <= 0 ||
-        domObject.top >= window.innerHeight) {
-        return true;
-    }
-    return false;
-}
-
 function setBattleUpdate(objBattle) {
-    const TIME_STEP = 1;
-    const ACCELERATION = 1;
 
     let arrUserMovement = [parseFloat(cntUser.style.transform.split(' ')[0].match(/[-]?\d+\.\d+/)),
     parseFloat(cntUser.style.transform.split(' ')[1].match(/[-]?\d+\.\d+/))];

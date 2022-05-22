@@ -33,7 +33,7 @@ window.addEventListener('load', function () {
 
         // TODO: Check if the player would still be alive
         
-        startWorld(true);
+        startBattle();
     } 
 
     
@@ -51,11 +51,19 @@ document.addEventListener('keydown', (event) => {
 
     // If the user is in world or battle mode
     if (intMode == 3 || intMode == 2) {
-        arrKeys.push(event.key);
+        
+        // Check if the previous key is the same as the current key
+        if (name != arrKeys[arrKeys.length - 1]) {
+            arrKeys.push(name);
+        }
+        
     }
 
     // Filter out duplicate keys
-    arrKeys = Array.from(new Set(arrKeys));
+    if (intMode == 3 || intMode == 2) {
+        arrKeys = Array.from(new Set(arrKeys));
+    }
+    console.log(arrKeys);
 }, false);
 
 document.addEventListener('keyup', (event) => {
