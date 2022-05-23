@@ -26,7 +26,7 @@ window.addEventListener('load', function () {
         } else {
 
             setCookies();
-            startWorld(false);
+            startBattle();
         }
     } else {
         parseCookies();

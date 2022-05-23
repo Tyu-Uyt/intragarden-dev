@@ -20,6 +20,26 @@ function startBattle() {
                            ['x', 'z'],
                            ['x', 'z', 'x'],
                         ],
+            combinationsMeta: {
+                0: {
+                    base: 'img/char/gilbert/battle/right/basic0.png',
+                    left: {
+                        base: 'img/char/gilbert/battle/left/basic0.png',
+                    },
+                    right: {
+                        base: 'img/char/gilbert/battle/right/basic0.png',
+                    }
+                },
+                1: {
+                    base: 'img/char/gilbert/battle/right/basic1.png',
+                    left: {
+                        base: 'img/char/gilbert/battle/left/basic1.png',
+                    },
+                    right: {
+                        base: 'img/char/gilbert/battle/right/basic1.png',
+                    }
+                },
+            },
             combinator: [],
             timers: {
                 combinator: null,
@@ -113,30 +133,33 @@ function checkKeys(objBattle, arrUserMovement, arrUserMovementPossibilities) {
         setTimeout(function() {document.body.style.backgroundImage = '';}, 310);
         setTimeout(function() {setFade(true); startWorld();}, 1000);
     } else {
-        if (arrKeys.includes('ArrowLeft') && arrUserMovementPossibilities[0]) {
-            objBattle.user.isFacingRight = false;
-    
-            arrUserMovement[0] -= 0.5;
-            imgUser.src = objBattle.character.user.left.base;
-        }
-    
-        if (arrKeys.includes('ArrowRight') && arrUserMovementPossibilities[1]) {
-            objBattle.user.isFacingRight = true;
-    
-            arrUserMovement[0] += 0.5;
-            imgUser.src = objBattle.character.user.right.base;
-        }
-    
-        if (arrKeys.includes('ArrowUp') && arrUserMovementPossibilities[2]) {
-            arrUserMovement[1] -= 0.5;
-        }
-
-        if (arrKeys.includes('ArrowDown') && arrUserMovementPossibilities[3]) {
-            arrUserMovement[1] += 0.5;
-        }
-
         checkCombinator('z');
         checkCombinator('x');
+
+        if (objBattle.info.combinator.length == 0) {
+            
+            if (arrKeys.includes('ArrowLeft') && arrUserMovementPossibilities[0]) {
+                objBattle.user.isFacingRight = false;
+        
+                arrUserMovement[0] -= 0.5;
+                imgUser.src = objBattle.character.user.left.base;
+            }
+        
+            if (arrKeys.includes('ArrowRight') && arrUserMovementPossibilities[1]) {
+                objBattle.user.isFacingRight = true;
+        
+                arrUserMovement[0] += 0.5;
+                imgUser.src = objBattle.character.user.right.base;
+            }
+        
+            if (arrKeys.includes('ArrowUp') && arrUserMovementPossibilities[2]) {
+                arrUserMovement[1] -= 0.5;
+            }
+
+            if (arrKeys.includes('ArrowDown') && arrUserMovementPossibilities[3]) {
+                arrUserMovement[1] += 0.5;
+            }
+        }
     }
 }
 
@@ -154,8 +177,20 @@ function checkCombinator(strLetter) {
                 objBattle.info.timers.cooldown = null;
             }},100);
         objBattle.info.timers.combinator = setTimeout(function() {
-            alert(objBattle.info.combinator);
-            objBattle.info.combinator = [];}, 1000);
+            objBattle.info.combinator = [];
+
+            if (objBattle.user.isFacingRight) {
+                imgUser.src = objBattle.character.user.base;
+            } else {
+                imgUser.src = objBattle.character.user.left.base;
+            }
+            
+            imgUser.style.width = '8vh';
+            imgUser.style.left = '0vh';
+            cntUserFight.style.width = '8vh';
+            cntUserFight.style.left = '0vh';
+        
+        }, 500);
         
     }
 }
@@ -167,18 +202,30 @@ function arrayEquals(a, b) {
         a.every((val, index) => val === b[index]);
 }
 
-function setCombinations (arrCombinator, arrCombinations) {
+function setCombinations (objBattle) {
     blnCanPass = false;
+    intMatchedIndex = 0;
 
-    for (let i = 0; i < arrCombinations.length; i++) {
-        if (arrayEquals(arrCombinator, arrCombinations[i])) {
+    for (let i = 0; i < objBattle.info.combinations.length; i++) {
+        if (arrayEquals(objBattle.info.combinator, objBattle.info.combinations[i])) {
             blnCanPass = true;
+            intMatchedIndex = i;
             break;
         }
     }
 
     if (blnCanPass) {
-
+        if (objBattle.user.isFacingRight) {
+            imgUser.src = objBattle.info.combinationsMeta[intMatchedIndex].right.base;
+            cntUserFight.style.width = '12vh';
+            imgUser.style.width = '12vh';
+        } else {
+            imgUser.src = objBattle.info.combinationsMeta[intMatchedIndex].left.base;
+            cntUserFight.style.width = '12vh';
+            imgUser.style.width = '12vh';
+            cntUserFight.style.left = '-4vh';
+            imgUser.style.left = '-4vh';
+        }
     }
 }
 
@@ -209,6 +256,7 @@ function setBattleUpdate(objBattle) {
     let domPlatform = [cntUpperGround.getBoundingClientRect(), cntGround.getBoundingClientRect(), cntLowerGround.getBoundingClientRect(), cntFallground.getBoundingClientRect()];
 
     boundaries(objBattle, arrUserMovementPossibilities, domUser, domPlatform);
+    setCombinations(objBattle);
     checkKeys(objBattle, arrUserMovement, arrUserMovementPossibilities);
 
     cntUser.style.transform = 'translateX(' + arrUserMovement[0] + 'vw) translateY(' + arrUserMovement[1] + 'vh)';
