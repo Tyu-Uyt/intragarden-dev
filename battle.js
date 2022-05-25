@@ -22,7 +22,6 @@ function startBattle() {
                         ],
             combinationsMeta: {
                 0: {
-                    base: 'img/char/gilbert/battle/right/basic0.png',
                     left: {
                         base: 'img/char/gilbert/battle/left/basic0.png',
                     },
@@ -31,7 +30,6 @@ function startBattle() {
                     }
                 },
                 1: {
-                    base: 'img/char/gilbert/battle/right/basic1.png',
                     left: {
                         base: 'img/char/gilbert/battle/left/basic1.png',
                     },
@@ -44,44 +42,26 @@ function startBattle() {
             timers: {
                 combinator: null,
                 cooldown: null
-            }
+            },
+            velocity: 0,
         },
         user: {
             isAlive: true,
-            isOnAir: false,
-            isCrouching: false,
             isHit: false,
+            isKnocked: false,
             isFacingRight: true,
-            isThrowsCooling: false,
-            cameFromCrouching: false,
-            intTimeInAir: 0,
-            dblVelocity: 0,
-            arrThrows: []
         },
         foe: {
             isAlive: true,
         },
         character: {
             user: {
-                base: 'img/char/gilbert/battle/normal.png',
                 left: {
                     base: 'img/char/gilbert/battle/left/normal.png',
-                    frames: ['img/char/gilbert/battle/left/basic0.png',
-                             'img/char/gilbert/battle/left/basic1.png',]
                 },
                 right: {
                     base: 'img/char/gilbert/battle/right/normal.png',
-                    frames: ['img/char/gilbert/battle/right/basic0.png',
-                             'img/char/gilbert/battle/right/basic1.png',]
                 },
-                crouch: {
-                    left: {
-                        base: 'img/char/gilbert/battle/crouch/left/normal.png'
-                    },
-                    right: {
-                        base: 'img/char/gilbert/battle/crouch/right/normal.png'
-                    }
-                }
             },
         },
         level: {
@@ -113,7 +93,7 @@ function startBattle() {
     setElement(document.body, 'div', 'cntUser', '', '', '', false, false);
     setElement(cntUser, 'div', 'cntUserFight', '', '', '', false, false);
     setElement(cntUser, 'div', 'cntUserBottom', '', '', '', false, false);
-    setElement(cntUser, 'img', 'imgUser', 'image/png', objBattle.character.user.base, 'image', false, true);
+    setElement(cntUser, 'img', 'imgUser', 'image/png', objBattle.character.user.right.base, 'image', false, true);
 
     // Give the user a coordinate starter
     cntUser.style.transform = 'translateX(20.1vw) translateY(64.1066vh)';
@@ -125,7 +105,7 @@ function startBattle() {
     setFade(true);
 }
 
-function checkKeys(objBattle, arrUserMovement, arrUserMovementPossibilities) {
+function checkKeys(objBattle, arrUserMovement, arrUserMovementPossibilities, domUser, domPlatform) {
     if (arrKeys.includes('Escape')) {
         
         clearInterval(itvBattle);
@@ -136,7 +116,7 @@ function checkKeys(objBattle, arrUserMovement, arrUserMovementPossibilities) {
         checkCombinator('z');
         checkCombinator('x');
 
-        if (objBattle.info.combinator.length == 0) {
+        if (objBattle.info.combinator.length == 0 && objBattle.user.isKnocked == false) {
             
             if (arrKeys.includes('ArrowLeft') && arrUserMovementPossibilities[0]) {
                 objBattle.user.isFacingRight = false;
@@ -159,8 +139,44 @@ function checkKeys(objBattle, arrUserMovement, arrUserMovementPossibilities) {
             if (arrKeys.includes('ArrowDown') && arrUserMovementPossibilities[3]) {
                 arrUserMovement[1] += 0.5;
             }
+
+            if (arrKeys.includes('6')) {
+                objBattle.user.isKnocked = true;
+                objBattle.info.velocity = 20;
+            }
         }
     }
+}
+
+function getKnocked(objBattle, domUser, domPlatform, arrUserMovement) {
+
+            // Calculate the future falling
+            domUser.y -= 1 * (objBattle.info.velocity + 1 * 1 / 2);
+    
+            // Based on the future Y, is the future bottom go beyond the ground?
+            if (domUser.bottom > domPlatform[2].top) {
+                // Adjust the future Y to even with the ground
+                domUser.y = domPlatform[2].top - domUser.height;
+    
+                // Clean-up
+                objBattle.user.isKnocked = false;
+                objBattle.info.velocity = 0;
+            } else {
+                // Keep falling
+                objBattle.info.velocity -= 1;
+            }
+    
+            // Convert Y coordinates to Viewpoint Height
+            let dblUserVH = domUser.y / (window.innerHeight * 0.01);
+
+            // Apply the Viewpoint Height to the movement
+            arrUserMovement[1] += dblUserVH - arrUserMovement[1];
+
+            if (objBattle.user.isFacingRight) {
+                arrUserMovement[0] -= 0.5;
+            } else {
+                arrUserMovement[0] += 0.5;
+            }
 }
 
 function checkCombinator(strLetter) {
@@ -180,7 +196,7 @@ function checkCombinator(strLetter) {
             objBattle.info.combinator = [];
 
             if (objBattle.user.isFacingRight) {
-                imgUser.src = objBattle.character.user.base;
+                imgUser.src = objBattle.character.user.right.base;
             } else {
                 imgUser.src = objBattle.character.user.left.base;
             }
@@ -253,11 +269,16 @@ function setBattleUpdate(objBattle) {
     parseFloat(cntUser.style.transform.split(' ')[1].match(/[-]?\d+\.\d+/))];
     let arrUserMovementPossibilities = [true, true, true, true];
     let domUser = cntUserBottom.getBoundingClientRect();
+    let domUserJump = imgUser.getBoundingClientRect();
     let domPlatform = [cntUpperGround.getBoundingClientRect(), cntGround.getBoundingClientRect(), cntLowerGround.getBoundingClientRect(), cntFallground.getBoundingClientRect()];
 
     boundaries(objBattle, arrUserMovementPossibilities, domUser, domPlatform);
     setCombinations(objBattle);
-    checkKeys(objBattle, arrUserMovement, arrUserMovementPossibilities);
+    checkKeys(objBattle, arrUserMovement, arrUserMovementPossibilities, domUser, domPlatform);
+
+    if (objBattle.user.isKnocked) {
+        getKnocked(objBattle, domUserJump, domPlatform, arrUserMovement);
+    }
 
     cntUser.style.transform = 'translateX(' + arrUserMovement[0] + 'vw) translateY(' + arrUserMovement[1] + 'vh)';
 }
