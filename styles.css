@@ -328,8 +328,12 @@ img {
 }
 
 #imgUser {
-    width: 8vh;
-    height: 23vh;
+    width: auto;
+    height: auto;
+    max-width: 23vh;
+    max-height: 23vh;
+    
+    position: absolute;
 }
 
 #cntUser {
@@ -353,5 +357,9 @@ img {
     height: 1vh;
     bottom: 0;
     background-color: blue;
+}
+
+#lblFooterBattle {
+    color: white;
 }
 /***********************************************************/

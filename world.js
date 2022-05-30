@@ -3,7 +3,7 @@
   intMode = 3;
 
   // Describe controls for world
-  setElement(document.body, 'label', 'lblFooterWorld', '', '[Esc]: Pause | [z]: Interact | [←]: Go left | [→]: Go right | [↓]: Go down | [↑]: Go up', 'footer', true, false); 
+  setElement(document.body, 'label', 'lblFooterWorld', '', '[Esc]: Pause | [z]: Interact | [←↑↓→]: Move', 'footer', true, false); 
 
   // TEMPORARILY: Set the level to zero
   let intLevel = 0;

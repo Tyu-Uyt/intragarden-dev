@@ -3,11 +3,13 @@ function startBattle() {
     intMode = 2;
 
     // Describe controls for battle
-    setElement(document.body, 'label', 'lblFooterBattle', '', '[Esc]: Back to world | [Spacebar]: Jump | [←]: Go left | [→]: Go right | [↓]: Crouch', 'footer', true, false); 
+    setElement(document.body, 'label', 'lblFooterBattle', '', '[Esc]: Back to world | [←↑↓→]: Move | [6]: Get knocked', 'footer', true, false); 
 
     // Set necessary values
     objBattle = {
+        characterIndex: 0,
         info: {
+            
             isCutscene: false,
             combinations: [['z'],
                            ['z', 'z'],
@@ -20,24 +22,6 @@ function startBattle() {
                            ['x', 'z'],
                            ['x', 'z', 'x'],
                         ],
-            combinationsMeta: {
-                0: {
-                    left: {
-                        base: 'img/char/gilbert/battle/left/basic0.png',
-                    },
-                    right: {
-                        base: 'img/char/gilbert/battle/right/basic0.png',
-                    }
-                },
-                1: {
-                    left: {
-                        base: 'img/char/gilbert/battle/left/basic1.png',
-                    },
-                    right: {
-                        base: 'img/char/gilbert/battle/right/basic1.png',
-                    }
-                },
-            },
             combinator: [],
             timers: {
                 combinator: null,
@@ -46,21 +30,56 @@ function startBattle() {
             velocity: 0,
         },
         user: {
+            health: 100,
             isAlive: true,
             isHit: false,
             isKnocked: false,
             isFacingRight: true,
+            isFinishingFromKnock: false,
+            wasAlreadyBelow: false,
         },
         foe: {
             isAlive: true,
         },
         character: {
-            user: {
+            0: {
                 left: {
                     base: 'img/char/gilbert/battle/left/normal.png',
                 },
                 right: {
                     base: 'img/char/gilbert/battle/right/normal.png',
+                },
+                knocked: {
+                    left: {
+                        frames: ['img/char/gilbert/battle/left/knocked0.png',
+                                 'img/char/gilbert/battle/left/knocked1.png',
+                                 'img/char/gilbert/battle/left/knocked2.png',
+                                 'img/char/gilbert/battle/left/knocked3.png',]
+                    },
+                    right: {
+                        frames: ['img/char/gilbert/battle/right/knocked0.png',
+                                 'img/char/gilbert/battle/right/knocked1.png',
+                                 'img/char/gilbert/battle/right/knocked2.png',
+                                 'img/char/gilbert/battle/right/knocked3.png',]
+                    }
+                },
+                combinationsMeta: {
+                    0: {
+                        left: {
+                            base: 'img/char/gilbert/battle/left/basic0.png',
+                        },
+                        right: {
+                            base: 'img/char/gilbert/battle/right/basic0.png',
+                        }
+                    },
+                    1: {
+                        left: {
+                            base: 'img/char/gilbert/battle/left/basic1.png',
+                        },
+                        right: {
+                            base: 'img/char/gilbert/battle/right/basic1.png',
+                        }
+                    },
                 },
             },
         },
@@ -93,7 +112,7 @@ function startBattle() {
     setElement(document.body, 'div', 'cntUser', '', '', '', false, false);
     setElement(cntUser, 'div', 'cntUserFight', '', '', '', false, false);
     setElement(cntUser, 'div', 'cntUserBottom', '', '', '', false, false);
-    setElement(cntUser, 'img', 'imgUser', 'image/png', objBattle.character.user.right.base, 'image', false, true);
+    setElement(cntUser, 'img', 'imgUser', 'image/png', objBattle.character[objBattle.characterIndex].right.base, 'image', false, true);
 
     // Give the user a coordinate starter
     cntUser.style.transform = 'translateX(20.1vw) translateY(64.1066vh)';
@@ -113,70 +132,124 @@ function checkKeys(objBattle, arrUserMovement, arrUserMovementPossibilities, dom
         setTimeout(function() {document.body.style.backgroundImage = '';}, 310);
         setTimeout(function() {setFade(true); startWorld();}, 1000);
     } else {
-        checkCombinator('z');
-        checkCombinator('x');
-
-        if (objBattle.info.combinator.length == 0 && objBattle.user.isKnocked == false) {
-            
-            if (arrKeys.includes('ArrowLeft') && arrUserMovementPossibilities[0]) {
-                objBattle.user.isFacingRight = false;
-        
-                arrUserMovement[0] -= 0.5;
-                imgUser.src = objBattle.character.user.left.base;
-            }
-        
-            if (arrKeys.includes('ArrowRight') && arrUserMovementPossibilities[1]) {
-                objBattle.user.isFacingRight = true;
-        
-                arrUserMovement[0] += 0.5;
-                imgUser.src = objBattle.character.user.right.base;
-            }
-        
-            if (arrKeys.includes('ArrowUp') && arrUserMovementPossibilities[2]) {
-                arrUserMovement[1] -= 0.5;
-            }
-
-            if (arrKeys.includes('ArrowDown') && arrUserMovementPossibilities[3]) {
-                arrUserMovement[1] += 0.5;
-            }
+        if (objBattle.user.isKnocked == false && objBattle.user.isFinishingFromKnock == false) {
+            checkCombinator('z');
+            checkCombinator('x');
 
             if (arrKeys.includes('6')) {
+
+                if (domUser.bottom > domPlatform[2].top) {
+                    objBattle.user.wasAlreadyBelow = true;
+                }
+
                 objBattle.user.isKnocked = true;
-                objBattle.info.velocity = 20;
+                objBattle.info.velocity += 20;
+                if (objBattle.user.isFacingRight) {
+                    imgUser.src = objBattle.character[objBattle.characterIndex].knocked.right.frames[0];
+                } else {
+                    imgUser.src = objBattle.character[objBattle.characterIndex].knocked.left.frames[0];
+                }
+                
+            }
+
+            if (objBattle.user.isKnocked == false && objBattle.info.combinator.length == 0) {
+    
+                if (arrKeys.includes('ArrowLeft') && arrUserMovementPossibilities[0]) {
+                    objBattle.user.isFacingRight = false;
+            
+                    arrUserMovement[0] -= 0.5;
+                    imgUser.src = objBattle.character[objBattle.characterIndex].left.base;
+                }
+            
+                if (arrKeys.includes('ArrowRight') && arrUserMovementPossibilities[1]) {
+                    objBattle.user.isFacingRight = true;
+            
+                    arrUserMovement[0] += 0.5;
+                    imgUser.src = objBattle.character[objBattle.characterIndex].right.base;
+                }
+            
+                if (arrKeys.includes('ArrowUp') && arrUserMovementPossibilities[2]) {
+                    arrUserMovement[1] -= 0.5;
+                }
+    
+                if (arrKeys.includes('ArrowDown') && arrUserMovementPossibilities[3]) {
+                    arrUserMovement[1] += 0.5;
+                }
             }
         }
     }
 }
 
 function getKnocked(objBattle, domUser, domPlatform, arrUserMovement) {
+    let oldY = domUser.y;
 
-            // Calculate the future falling
-            domUser.y -= 1 * (objBattle.info.velocity + 1 * 1 / 2);
-    
-            // Based on the future Y, is the future bottom go beyond the ground?
-            if (domUser.bottom > domPlatform[2].top) {
-                // Adjust the future Y to even with the ground
-                domUser.y = domPlatform[2].top - domUser.height;
-    
-                // Clean-up
-                objBattle.user.isKnocked = false;
-                objBattle.info.velocity = 0;
-            } else {
-                // Keep falling
-                objBattle.info.velocity -= 1;
-            }
-    
-            // Convert Y coordinates to Viewpoint Height
-            let dblUserVH = domUser.y / (window.innerHeight * 0.01);
+    // Calculate the future falling
+    domUser.y -= 1 * (objBattle.info.velocity + 1 * 1 / 2);
 
-            // Apply the Viewpoint Height to the movement
-            arrUserMovement[1] += dblUserVH - arrUserMovement[1];
+    if(domUser.y > oldY) {
+
+        if (objBattle.user.isFacingRight) {
+            imgUser.src = objBattle.character[objBattle.characterIndex].knocked.right.frames[1];
+        } else {
+            imgUser.src = objBattle.character[objBattle.characterIndex].knocked.left.frames[1];
+        }
+    }
+
+
+    // Based on the future Y, is the future bottom go beyond the ground?
+    if ((domUser.bottom > domPlatform[2].top && objBattle.user.wasAlreadyBelow == false) || ((domUser.bottom + 10 > domPlatform[3].top && objBattle.user.wasAlreadyBelow == true))) {
+        objBattle.user.wasAlreadyBelow = false;
+
+        if (objBattle.user.isFacingRight) {
+            imgUser.src = objBattle.character[objBattle.characterIndex].knocked.right.frames[2];
+        } else {
+            imgUser.src = objBattle.character[objBattle.characterIndex].knocked.left.frames[2];
+        }
+        
+        setTimeout( function() {
+            
+            imgUser.style.bottom = "0";
+            imgUser.style.maxHeight = "20vh";
+            arrUserMovement[1] -= 15;
+            cntUser.style.transform = 'translateX(' + arrUserMovement[0] + 'vw) translateY(' + arrUserMovement[1] + 'vh)';
+
+            setTimeout(function() {
+                objBattle.user.isFinishingFromKnock = false;
+                imgUser.style.bottom = "";
+                imgUser.style.maxHeight = "23vh";
+                if (objBattle.user.isFacingRight) {
+                    imgUser.src = objBattle.character[objBattle.characterIndex].right.base;
+                } else {
+                    imgUser.src = objBattle.character[objBattle.characterIndex].left.base;
+                }
+            }, 700);
 
             if (objBattle.user.isFacingRight) {
-                arrUserMovement[0] -= 0.5;
+                imgUser.src = objBattle.character[objBattle.characterIndex].knocked.right.frames[3];
             } else {
-                arrUserMovement[0] += 0.5;
+                imgUser.src = objBattle.character[objBattle.characterIndex].knocked.left.frames[3];
             }
+        }, 1000, arrUserMovement);
+
+        objBattle.user.isFinishingFromKnock = true;
+        objBattle.user.isKnocked = false;
+        objBattle.info.velocity = 0;
+    } else {
+        // Keep falling
+        objBattle.info.velocity -= 1;
+    }
+
+    // Convert Y coordinates to Viewpoint Height
+    let dblUserVH = domUser.y / (window.innerHeight * 0.01);
+
+    // Apply the Viewpoint Height to the movement
+    arrUserMovement[1] += dblUserVH - arrUserMovement[1];
+
+    if (objBattle.user.isFacingRight) {
+        arrUserMovement[0] -= 0.5;
+    } else {
+        arrUserMovement[0] += 0.5;
+    }
 }
 
 function checkCombinator(strLetter) {
@@ -195,16 +268,17 @@ function checkCombinator(strLetter) {
         objBattle.info.timers.combinator = setTimeout(function() {
             objBattle.info.combinator = [];
 
-            if (objBattle.user.isFacingRight) {
-                imgUser.src = objBattle.character.user.right.base;
-            } else {
-                imgUser.src = objBattle.character.user.left.base;
+            if (objBattle.user.isKnocked == false) {
+                if (objBattle.user.isFacingRight) {
+                    imgUser.src = objBattle.character[objBattle.characterIndex].right.base;
+                } else {
+                    imgUser.src = objBattle.character[objBattle.characterIndex].left.base;
+                }
             }
             
-            imgUser.style.width = '8vh';
-            imgUser.style.left = '0vh';
             cntUserFight.style.width = '8vh';
-            cntUserFight.style.left = '0vh';
+            cntUserFight.style.left = '0vh'
+            imgUser.style.left = '0vh';
         
         }, 500);
         
@@ -231,27 +305,36 @@ function setCombinations (objBattle) {
     }
 
     if (blnCanPass) {
-        if (objBattle.user.isFacingRight) {
-            imgUser.src = objBattle.info.combinationsMeta[intMatchedIndex].right.base;
-            cntUserFight.style.width = '12vh';
-            imgUser.style.width = '12vh';
-        } else {
-            imgUser.src = objBattle.info.combinationsMeta[intMatchedIndex].left.base;
-            cntUserFight.style.width = '12vh';
-            imgUser.style.width = '12vh';
-            cntUserFight.style.left = '-4vh';
-            imgUser.style.left = '-4vh';
+        cntUserFight.style.width = '12vh';
+
+        
+        if (objBattle.user.isKnocked == false) {
+            if (objBattle.user.isFacingRight) {
+                imgUser.src = objBattle.character[objBattle.characterIndex].combinationsMeta[intMatchedIndex].right.base;
+            } else {
+                imgUser.src = objBattle.character[objBattle.characterIndex].combinationsMeta[intMatchedIndex].left.base;
+                cntUserFight.style.left = '-4vh';
+                imgUser.style.left = '-4vh';
+            }    
         }
     }
 }
 
-function boundaries(objBattle, arrUserMovementPossibilities, domUser, domPlatform) {
+function boundaries(objBattle, arrUserMovementPossibilities, domUser, domPlatform, arrUserMovement) {
     if (domUser.left - 10 < 0) {
         arrUserMovementPossibilities[0] = false;
+
+        if (objBattle.user.isKnocked) {
+            arrUserMovement[0] += 0.5;
+        }
     }
 
     if (domUser.right + 10 > window.innerWidth) {
         arrUserMovementPossibilities[1] = false;
+
+        if (objBattle.user.isKnocked) {
+            arrUserMovement[0] -= 0.5;
+        }
     }
 
     if (domUser.top - 10 < domPlatform[0].top) {
@@ -272,7 +355,7 @@ function setBattleUpdate(objBattle) {
     let domUserJump = imgUser.getBoundingClientRect();
     let domPlatform = [cntUpperGround.getBoundingClientRect(), cntGround.getBoundingClientRect(), cntLowerGround.getBoundingClientRect(), cntFallground.getBoundingClientRect()];
 
-    boundaries(objBattle, arrUserMovementPossibilities, domUser, domPlatform);
+    boundaries(objBattle, arrUserMovementPossibilities, domUser, domPlatform, arrUserMovement);
     setCombinations(objBattle);
     checkKeys(objBattle, arrUserMovement, arrUserMovementPossibilities, domUser, domPlatform);
 
