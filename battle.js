@@ -8,6 +8,7 @@ function startBattle() {
     // Set necessary values
     objBattle = {
         characterIndex: 0,
+        foeIndex: 1,
         info: {
             
             isCutscene: false,
@@ -30,7 +31,6 @@ function startBattle() {
             velocity: 0,
         },
         user: {
-            health: 100,
             isAlive: true,
             isHit: false,
             isKnocked: false,
@@ -43,6 +43,10 @@ function startBattle() {
         },
         character: {
             0: {
+                name: 'Gila Gilbert',
+                profile: 'img/battle/profiles/0msk.svg',
+                health: 100,
+                gage: 85,
                 left: {
                     base: 'img/char/gilbert/battle/left/normal.png',
                 },
@@ -82,6 +86,12 @@ function startBattle() {
                     },
                 },
             },
+            1: {
+                name: 'Maria Shalashuska',
+                profile: 'img/battle/profiles/1msk.svg',
+                health: 100,
+                gage: 50,
+            },
         },
         level: {
             0: {
@@ -113,6 +123,39 @@ function startBattle() {
     setElement(cntUser, 'div', 'cntUserFight', '', '', '', false, false);
     setElement(cntUser, 'div', 'cntUserBottom', '', '', '', false, false);
     setElement(cntUser, 'img', 'imgUser', 'image/png', objBattle.character[objBattle.characterIndex].right.base, 'image', false, true);
+
+    // Set HUD
+    setElement(document.body, 'div', 'cntCentralHUD', '', '', '', false, false);
+    // Player hud
+    setElement(cntCentralHUD, 'div', 'cntHUD0', '', '', '', false, false);
+    setElement(cntHUD0, 'div', 'cntHUDBasePic', '', '', '', false, false);
+    setElement(cntHUDBasePic, 'img', 'imgHUDPlayerPic', 'image/svg', objBattle.character[objBattle.characterIndex].profile, 'image', false, true);
+    setElement(cntHUD0, 'div', 'cntHUDInformation', '', '', '', false, false);
+    setElement(cntHUDInformation, 'label', 'lblHUDName', '', objBattle.character[objBattle.characterIndex].name, '', true, false);
+    setElement(cntHUDInformation, 'div', 'cntBars', '', '', '', false, false);
+    setElement(cntBars, 'div', 'cntHUDHealth', '', '', '', false, false);
+    setElement(cntHUDHealth, 'div', 'cntHUDHealthBar', '', '', '', false, false);
+    setElement(cntBars, 'div', 'cntHUDGage', '', '', '', false, false);
+    setElement(cntHUDGage, 'div', 'cntHUDGageBar', '', '', '', false, false);
+
+    // Foe Hud
+    setElement(cntCentralHUD, 'div', 'cntHUD1', '', '', '', false, false);
+    setElement(cntHUD1, 'div', 'cntHUDBasePic1', '', '', '', false, false);
+    setElement(cntHUDBasePic1, 'img', 'imgHUDPlayerPic1', 'image/svg', objBattle.character[objBattle.foeIndex].profile, 'image', false, true);
+    setElement(cntHUD1, 'div', 'cntHUDInformation1', '', '', '', false, false);
+    setElement(cntHUDInformation1, 'label', 'lblHUDName1', '', objBattle.character[objBattle.foeIndex].name, '', true, false);
+    setElement(cntHUDInformation1, 'div', 'cntBars1', '', '', '', false, false);
+    setElement(cntBars1, 'div', 'cntHUDHealth1', '', '', '', false, false);
+    setElement(cntHUDHealth1, 'div', 'cntHUDHealthBar1', '', '', '', false, false);
+    setElement(cntBars1, 'div', 'cntHUDGage1', '', '', '', false, false);
+    setElement(cntHUDGage1, 'div', 'cntHUDGageBar1', '', '', '', false, false);
+
+
+    cntHUDHealthBar.style.width = (objBattle.character[objBattle.characterIndex].health / 3.5) + 'vh';
+    cntHUDGageBar.style.width = (objBattle.character[objBattle.characterIndex].gage / 3.5) + 'vh';
+
+    cntHUDHealthBar1.style.width = (objBattle.character[objBattle.foeIndex].health / 3.5) + 'vh';
+    cntHUDGageBar1.style.width = (objBattle.character[objBattle.foeIndex].gage / 3.5) + 'vh';
 
     // Give the user a coordinate starter
     cntUser.style.transform = 'translateX(20.1vw) translateY(64.1066vh)';

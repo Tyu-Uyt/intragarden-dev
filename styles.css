@@ -85,10 +85,12 @@ img {
 
 .footer {
     font-size: 3vh;
+    font-weight: bold;
     position: absolute;
     bottom: 1vh;
     z-index: 1;
     left: 1vw;
+    filter:drop-shadow(0 0 1vh rgb(0, 0, 0));
 }
 /***********************************************************/
 /************************ Keyframes ************************/
@@ -361,5 +363,99 @@ img {
 
 #lblFooterBattle {
     color: white;
+}
+
+#cntCentralHUD {
+    position: absolute;
+    margin: auto;
+    width: 100%;
+    height: 20vh;
+    display:flex;
+    top:5vh;
+}
+
+#cntHUD0, #cntHUD1 {
+    width:50vh;
+    height: 20vh;
+    display:flex;
+    filter:drop-shadow(0 0 1vh rgb(0, 0, 0));
+}
+
+#cntHUD1 {
+    transform: scaleX(-1);
+}
+
+#cntHUDBasePic, #cntHUDBasePic1 {
+    position: relative;
+    left: 6vh;
+    width: 15vh;
+    height: 15vh;
+    background-color:white;
+    transform: rotate(45deg);
+}
+
+#imgHUDPlayerPic, #imgHUDPlayerPic1 {
+    width: 25vh;
+    height: 25vh;
+    bottom: -4vh;
+    left: -6vh;
+    transform: rotate(-45deg);
+}
+
+#cntHUDInformation, #cntHUDInformation1 {
+    width: 30vh;
+    height: 8vh;
+    display:flex;
+    flex-direction: column;
+}
+
+#lblHUDName, #lblHUDName1 {
+    color: white;
+    font-size: 3vh;
+    font-weight: bold;
+    text-align: right;
+    margin-top: -3vh;
+    position: relative;
+    left: 4vh;
+}
+
+#lblHUDName1 {
+    transform: scaleX(-1);
+    text-align: left;
+}
+
+#cntHUDHealth, #cntHUDHealth1 {
+    width: 28vh;
+    height: 3vh;
+    border: 0.3vh solid transparent;
+    display:flex;
+    flex-direction: row;
+}
+
+#cntHUDHealthBar, #cntHUDHealthBar1 {
+    width: 28vh;
+    height: 3vh;
+    background-image: linear-gradient(to top, darkred,rgb(175, 22, 22), rgb(255, 72, 72));
+    border: 0.1vh solid transparent;
+    border-bottom-right-radius: 5vh;
+    margin: 0;
+}
+
+#cntHUDGage, #cntHUDGage1 {
+    width: 24vh;
+    height: 1vh;
+    border: 0.3vh solid transparent;
+    display:flex;
+    flex-direction: row;
+    margin: 0;
+}
+
+#cntHUDGageBar, #cntHUDGageBar1 {
+    width: 24vh;
+    height: 1vh;
+    background-image: linear-gradient(to top, darkGreen,rgb(26, 139, 26), rgb(54, 172, 54));
+    border: 0.1vh solid transparent;
+    border-bottom-right-radius: 5vh;
+    margin: 0;
 }
 /***********************************************************/
